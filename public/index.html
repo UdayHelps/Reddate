@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>r/Reddate — watch together, privately</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;700&family=Geist+Mono:wght@500&display=swap">
+    <link rel="stylesheet" href="/tokens.css">
+    <style>
+/* Hallmark · genre: modern-minimal · macrostructure: none (app shell — Stage + Rail) · tone: minimal
+ * theme: custom (brand-preserved Reddit palette) · paper oklch(16% 0.008 40) dark / oklch(98% 0.004 40) light
+ * accent oklch(68% 0.21 36) dark / oklch(55% 0.21 36) light (Reddit orange #ff4500 = oklch(66% 0.229 35.4))
+ * fonts: Geist (UI) + Geist Mono (outlier: wordmark + numeric readouts)
+ * tokens: /tokens.css · pre-emit critique: P4 H5 E4 S4 R5 V4
+ * contrast: pass (40–41) · tokens: pass (48) · responsive: pass (34, 49–51) · icons: Lucide only (30) · outlier: 2 slots (38)
+ */
+
+        /* ---------- Base ---------- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { overflow-x: clip; }
+        body {
+            font-family: var(--font-body);
+            font-size: var(--text-base);
+            line-height: 1.5;
+            background: var(--color-paper);
+            color: var(--color-ink);
+            -webkit-font-smoothing: antialiased;
+        }
+        h1, h2, h3 { font-weight: 700; font-style: normal; letter-spacing: -0.02em; line-height: 1.2; overflow-wrap: anywhere; min-width: 0; }
+        button, input, select, textarea { font: inherit; color: inherit; }
+        :focus { outline: none; }
+        :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+        [hidden] { display: none !important; }
+        .hidden { display: none !important; }
+        .sr-only {
+            position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+            overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+        }
+        .icon {
+            width: 1.125rem; height: 1.125rem; flex: none;
+            fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+        }
+        .mono { font-variant-numeric: tabular-nums; } /* aligned digits in the UI face; Geist Mono is reserved for the wordmark + chat timestamps */
+
+        /* ---------- Buttons ----------
+         * .btn / .control-btn: neutral · .btn-primary: the one orange action per area
+         * .icon-btn: square icon-only · .tab-btn / .chip: pills used inside modals */
+        .btn, .control-btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: var(--space-xs);
+            height: var(--control-h); padding: 0 var(--space-md);
+            border: 1px solid var(--color-rule); border-radius: var(--radius-pill);
+            background: var(--color-paper-2); color: var(--color-ink);
+            font-size: var(--text-sm); font-weight: 700; white-space: nowrap; cursor: pointer;
+            transition: background-color var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+        }
+        .btn-primary, .send-btn {
+            background: var(--color-accent); border-color: var(--color-accent); color: var(--color-accent-ink);
+        }
+        .btn-ghost { background: transparent; border-color: transparent; }
+        .icon-btn {
+            display: inline-grid; place-items: center; flex: none;
+            width: var(--control-h); height: var(--control-h);
+            border: 1px solid transparent; border-radius: var(--radius-pill);
+            background: transparent; color: var(--color-muted); cursor: pointer;
+            transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+        }
+        button:active:not(:disabled) { transform: translateY(1px); }
+        button:disabled { opacity: 0.55; cursor: not-allowed; }
+        @media (hover: hover) {
+            .btn:hover:not(:disabled), .control-btn:hover:not(:disabled) { background: var(--color-paper-3); }
+            .btn-primary:hover:not(:disabled), .send-btn:hover:not(:disabled) {
+                background: var(--color-accent-hover); border-color: var(--color-accent-hover);
+            }
+            .btn-ghost:hover:not(:disabled) { background: var(--color-paper-2); }
+            .icon-btn:hover:not(:disabled) { background: var(--color-paper-2); color: var(--color-ink); }
+        }
+
+        /* ---------- Fields (one height, constant 1px border, reserved focus ring) ---------- */
+        .lobby-input, .url-input, .chat-input, .browse-input, .browse-select, .gif-search {
+            height: var(--control-h); padding: 0 var(--space-sm);
+            border: 1px solid var(--color-rule-2); border-radius: var(--radius-sm);
+            background: var(--color-paper); color: var(--color-ink);
+            font-size: var(--text-sm); min-width: 0;
+            outline: 2px solid transparent; outline-offset: 1px;
+            transition: background-color var(--dur-micro) var(--ease-out);
+        }
+        .lobby-input::placeholder, .url-input::placeholder, .chat-input::placeholder,
+        .browse-input::placeholder, .gif-search::placeholder { color: var(--color-muted); }
+        .lobby-input:focus-visible, .url-input:focus-visible, .chat-input:focus-visible,
+        .browse-input:focus-visible, .browse-select:focus-visible, .gif-search:focus-visible {
+            outline-color: var(--color-focus);
+        }
+        @media (hover: hover) {
+            .lobby-input:hover, .url-input:hover, .chat-input:hover, .browse-input:hover, .gif-search:hover {
+                background: var(--color-paper-2);
+            }
+        }
+        @media (pointer: coarse) {
+            /* iOS Safari zooms into text fields smaller than 16px. */
+            .lobby-input, .url-input, .chat-input, .browse-input, .browse-select, .gif-search { font-size: var(--text-base); }
+        }
+
+        /* ---------- Lobby ---------- */
+        .lobby {
+            position: fixed; inset: 0; z-index: var(--z-modal);
+            display: grid; place-items: center; padding: var(--space-md);
+            background: var(--color-paper);
+        }
+        .lobby-card {
+            width: 100%; max-width: 25rem;
+            display: grid; gap: var(--space-md);
+            padding: var(--space-xl) var(--space-lg) var(--space-lg);
+            border: 1px solid var(--color-rule); border-radius: var(--radius-lg);
+            background: var(--color-paper-2);
+        }
+        .lobby-card .wordmark { font-size: var(--text-lg); }
+        .lobby-tagline { color: var(--color-muted); font-size: var(--text-sm); margin-top: calc(-1 * var(--space-xs)); }
+        .field { display: grid; gap: var(--space-xs); }
+        .field-label { font-size: var(--text-sm); font-weight: 700; }
+        .lobby-card .btn { width: 100%; }
+        .privacy-note {
+            display: flex; gap: var(--space-xs); align-items: flex-start;
+            padding-top: var(--space-md); border-top: 1px solid var(--color-rule);
+            color: var(--color-muted); font-size: var(--text-xs);
+        }
+        .privacy-note .icon { color: var(--color-success); width: 1rem; height: 1rem; margin-top: 1px; }
+
+        /* ---------- Wordmark (outlier face, slot 1 of 2) ---------- */
+        .wordmark {
+            font-family: var(--font-mono); font-weight: 500; letter-spacing: -0.03em;
+            color: var(--color-accent); white-space: nowrap;
+        }
+
+        /* ---------- App shell: Stage + Rail ---------- */
+        .shell { min-height: 100dvh; display: grid; grid-template-rows: var(--topbar-h) 1fr; }
+        .topbar {
+            position: sticky; top: 0; z-index: var(--z-sticky);
+            display: flex; align-items: center; gap: var(--space-sm);
+            padding: 0 var(--space-xs) 0 var(--space-md);
+            padding-left: max(var(--space-md), env(safe-area-inset-left));
+            padding-right: max(var(--space-xs), env(safe-area-inset-right));
+            border-bottom: 1px solid var(--color-rule);
+            background: var(--color-paper);
+        }
+        .topbar .wordmark { font-size: var(--text-md); }
+        .room-meta {
+            display: flex; align-items: center; gap: var(--space-sm); min-width: 0;
+            color: var(--color-muted); font-size: var(--text-xs);
+        }
+        .conn { display: inline-flex; align-items: center; gap: var(--space-xs); white-space: nowrap; }
+        /* Smallest phones: the dot alone (text stays readable to screen readers). */
+        .conn-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+        .status-indicator { width: 8px; height: 8px; border-radius: 50%; background: var(--color-success); flex: none; }
+        .status-indicator.disconnected { background: var(--color-error); }
+        .e2e { display: none; align-items: center; gap: var(--space-2xs); white-space: nowrap; }
+        .e2e .icon { width: 0.875rem; height: 0.875rem; color: var(--color-success); }
+        .top-actions { margin-left: auto; display: flex; align-items: center; gap: var(--space-2xs); }
+        .top-actions .btn .label { display: none; }
+        .top-actions .btn { padding: 0; width: var(--control-h); }
+        .support-link[hidden], .lobby-support[hidden] { display: none; }
+        .lobby-support {
+            display: inline-flex; align-items: center; justify-content: center; gap: var(--space-xs);
+            color: var(--color-muted); font-size: var(--text-sm); text-decoration: none;
+        }
+        .lobby-support .icon { width: 1rem; height: 1rem; }
+        @media (hover: hover) { .lobby-support:hover { color: var(--color-ink); } }
+        .chat-toggle { position: relative; }
+        .chat-toggle[aria-expanded="true"] { background: var(--color-paper-2); }
+        .unread {
+            position: absolute; top: 2px; right: 0;
+            min-width: 1.125rem; height: 1.125rem; padding: 0 var(--space-2xs);
+            border-radius: var(--radius-pill); background: var(--color-accent); color: var(--color-accent-ink);
+            font-size: var(--text-xs); font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.125rem; text-align: center;
+        }
+
+        .stage {
+            min-width: 0;
+            padding: var(--space-md);
+            padding-left: max(var(--space-md), env(safe-area-inset-left));
+            padding-right: max(var(--space-md), env(safe-area-inset-right));
+        }
+        .post { display: grid; gap: var(--space-sm); max-width: 90rem; }
+        .post-meta {
+            display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-xs);
+            color: var(--color-muted); font-size: var(--text-xs);
+        }
+        .op-tag {
+            padding: var(--space-3xs) var(--space-xs); border-radius: var(--radius-sm);
+            background: var(--color-paper-3); color: var(--color-ink);
+            font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.04em;
+        }
+        .pinned, .pinned-sep { display: none; } /* shown from 40rem; keeps the meta row on one line on phones */
+        .pinned { align-items: center; gap: var(--space-2xs); }
+        .pinned .icon { width: 0.875rem; height: 0.875rem; }
+        .upvote-section {
+            margin-left: auto; display: inline-flex; align-items: center; gap: var(--space-3xs);
+            padding: var(--space-3xs); border: 1px solid var(--color-rule); border-radius: var(--radius-pill);
+        }
+        .arrow {
+            display: inline-grid; place-items: center; width: 1.75rem; height: 1.75rem; position: relative;
+            border: 0; border-radius: var(--radius-pill); background: transparent; color: var(--color-muted); cursor: pointer;
+        }
+        .arrow::before { content: ""; position: absolute; inset: -6px; } /* 40px hit target */
+        .arrow .icon { width: 1rem; height: 1rem; }
+        .arrow.upvoted { color: var(--color-accent); }
+        .arrow.upvoted .icon, .arrow.downvoted .icon { fill: currentColor; }
+        .arrow.downvoted { color: var(--color-info); }
+        @media (hover: hover) { .arrow:hover { background: var(--color-paper-2); color: var(--color-ink); } }
+        .vote-count { min-width: 1.25rem; text-align: center; color: var(--color-ink); font-weight: 700; }
+
+        .now-playing {
+            display: none; font-size: var(--text-md); overflow-wrap: anywhere; min-width: 0;
+        }
+        .player-status { color: var(--color-muted); font-size: var(--text-sm); }
+        .player-status:empty { display: none; }
+
+        .player-wrap { position: relative; }
+        #videoPlayer {
+            width: 100%; aspect-ratio: 16 / 9; max-height: calc(100dvh - 14rem);
+            border-radius: var(--radius-md); overflow: hidden; background: var(--color-stage);
+        }
+        #videoPlayer > video, #videoPlayer iframe { width: 100%; height: 100%; display: block; border: 0; }
+        #videoPlayer video::cue { background: var(--color-scrim); color: var(--color-logo-chip); font-size: 1.1em; line-height: 1.35; }
+        /* Empty player: a quiet card in the page's own colours (not a black "TV off" box). */
+        .player-wrap:has(#videoPlayer:empty) #videoPlayer { min-height: 15rem; background: var(--color-paper-2); box-shadow: inset 0 0 0 1px var(--color-rule); }
+        .player-empty {
+            position: absolute; inset: 0; display: none;
+            place-content: center; justify-items: center; gap: var(--space-sm);
+            padding: var(--space-md); text-align: center; color: var(--color-muted);
+        }
+        .player-wrap:has(#videoPlayer:empty) .player-empty { display: grid; }
+        .player-empty .empty-icon {
+            display: grid; place-items: center; width: 3.5rem; height: 3.5rem; border-radius: 50%;
+            background: var(--color-paper-3); color: var(--color-ink);
+        }
+        .player-empty .empty-icon .icon { width: 1.5rem; height: 1.5rem; }
+        .player-empty p { font-size: var(--text-sm); max-width: 30ch; }
+        .player-empty p b { display: block; color: var(--color-ink); font-size: var(--text-base); margin-bottom: var(--space-3xs); }
+        .player-empty .btn { background: var(--color-paper); }
+
+        /* Phones: Browse gets its own row, the rest an even grid — pinned to
+         * the bottom of the screen, in thumb reach. */
+        .video-controls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-xs); }
+        .video-controls #browseBtn { grid-column: 1 / -2; }
+        .video-controls #fullscreenBtn .label { display: none; }
+        .video-controls .btn { padding: 0 var(--space-sm); }
+        @media (max-width: 39.999rem) {
+            .video-controls {
+                position: fixed; left: 0; right: 0; bottom: 0; z-index: var(--z-sticky);
+                padding: var(--space-sm) max(var(--space-md), env(safe-area-inset-right))
+                    max(var(--space-sm), env(safe-area-inset-bottom)) max(var(--space-md), env(safe-area-inset-left));
+                border-top: 1px solid var(--color-rule); background: var(--color-paper);
+            }
+            /* --controls-h is measured by app.js (grows when Subtitles/Audio add a row) */
+            .stage { padding-bottom: calc(var(--controls-h, 8rem) + var(--control-h) + var(--space-md)); }
+            /* centre the player in the space between the post line and the controls */
+            .stage { display: flex; flex-direction: column; min-height: calc(100dvh - var(--topbar-h)); }
+            .post { flex: 1; display: flex; flex-direction: column; }
+            .post > * + * { margin-top: var(--space-sm); }
+            .post .player-wrap { margin-block: auto; }
+            .shell.sheet-open .post .player-wrap { margin-top: 0; } /* comments sheet open: video back up, above it */
+            /* Copy invite + Comments float just above the controls, right side,
+               over the Full screen button; the top bar keeps the name and theme. */
+            #shareBtn, #chatToggle {
+                position: fixed; z-index: var(--z-sticky); bottom: calc(var(--controls-h, 8rem) + var(--space-xs));
+                border: 1px solid var(--color-rule); border-radius: 50%; background: var(--color-paper-2);
+                box-shadow: 0 4px 12px var(--color-shadow);
+            }
+            #chatToggle { right: max(var(--space-md), env(safe-area-inset-right)); }
+            #shareBtn { right: calc(max(var(--space-md), env(safe-area-inset-right)) + var(--control-h) + var(--space-xs)); }
+            .voice-panel, .toast { bottom: calc(var(--controls-h, 8rem) + var(--control-h) + var(--space-xs) * 2); }
+        }
+        #subsBtn.is-on { border-color: var(--color-accent); }
+
+        /* ---------- Comments: bottom sheet on phones, rail on wide screens ---------- */
+        .rail {
+            position: fixed; left: 0; right: 0; bottom: 0; z-index: var(--z-sheet);
+            height: min(56dvh, 34rem); /* stops below the video so you can watch and chat */
+            border-top: 1px solid var(--color-rule); border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+            background: var(--color-paper);
+            box-shadow: 0 -8px 24px var(--color-shadow);
+            transform: translateY(100%); visibility: hidden;
+            transition: transform calc(var(--dur-long) * 0.75) var(--ease-in), visibility 0s linear calc(var(--dur-long) * 0.75);
+        }
+        .shell.sheet-open .rail {
+            transform: none; visibility: visible;
+            transition: transform var(--dur-long) var(--ease-out), visibility 0s;
+        }
+        .chat-container { height: 100%; display: flex; flex-direction: column; min-height: 0; }
+        .chat-header {
+            position: relative; display: flex; align-items: center; gap: var(--space-xs);
+            padding: var(--space-md) var(--space-xs) var(--space-sm) var(--space-md);
+            border-bottom: 1px solid var(--color-rule);
+        }
+        .sheet-grabber {
+            position: absolute; top: var(--space-xs); left: 50%; transform: translateX(-50%);
+            width: 2.5rem; height: 4px; border-radius: var(--radius-pill); background: var(--color-rule);
+        }
+        .chat-header h2 { font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-xs); }
+        .live-indicator {
+            padding: 0 var(--space-xs); border: 1px solid var(--color-success); border-radius: var(--radius-pill);
+            color: var(--color-success); font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.06em;
+        }
+        .user-count { margin-left: auto; color: var(--color-muted); font-size: var(--text-xs); white-space: nowrap; }
+        .chat-messages { flex: 1; min-height: 0; overflow-y: auto; padding: var(--space-md); display: grid; align-content: start; gap: var(--space-md); }
+        .message-header { display: flex; align-items: baseline; gap: var(--space-xs); font-size: var(--text-xs); margin-bottom: var(--space-2xs); }
+        .username { font-weight: 700; color: var(--color-info); }
+        .username.self { color: var(--color-accent); }
+        .timestamp { color: var(--color-muted); font-family: var(--font-mono); font-variant-numeric: tabular-nums; } /* outlier slot 2 */
+        .message-content { font-size: var(--text-sm); line-height: 1.5; overflow-wrap: anywhere; }
+        .message-content img { max-width: 100%; border-radius: var(--radius-sm); margin-top: var(--space-2xs); display: block; }
+        .system-message .message-content { color: var(--color-muted); font-size: var(--text-xs); font-style: italic; text-align: center; }
+        .typing-indicator { padding: 0 var(--space-md) var(--space-xs); color: var(--color-muted); font-size: var(--text-xs); font-style: italic; }
+        .chat-input-container {
+            display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-xs) var(--space-2xs);
+            padding: var(--space-sm) var(--space-sm) max(var(--space-sm), env(safe-area-inset-bottom));
+            border-top: 1px solid var(--color-rule);
+        }
+        .chat-input { flex: 1 1 100%; order: -1; }
+        .send-btn { margin-left: auto; }
+        .gif-btn { font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.04em; }
+
+        @keyframes messageIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+        .message { animation: messageIn var(--dur-short) var(--ease-out); }
+
+        /* ---------- Toast & reaction rain ---------- */
+        .toast {
+            position: fixed; left: 50%; bottom: max(var(--space-lg), env(safe-area-inset-bottom)); z-index: var(--z-toast);
+            transform: translate(-50%, 8px); opacity: 0; pointer-events: none;
+            max-width: calc(100% - 2 * var(--space-md));
+            padding: var(--space-sm) var(--space-md); border: 1px solid var(--color-rule); border-radius: var(--radius-md);
+            background: var(--color-paper-3); color: var(--color-ink); font-size: var(--text-sm);
+            transition: opacity var(--dur-short) var(--ease-out), transform var(--dur-short) var(--ease-out);
+        }
+        .toast.show { opacity: 1; transform: translate(-50%, 0); }
+        .rain-container { position: fixed; inset: 0; pointer-events: none; z-index: var(--z-overlay); overflow: hidden; }
+        .rain-emoji { position: absolute; font-size: var(--text-lg); animation: rainFall 3s linear forwards; opacity: 0.85; }
+        @keyframes rainFall { 0% { transform: translateY(-100px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(360deg); opacity: 0; } }
+
+        /* ---------- Modals (full-screen sheets on phones, dialogs on wider screens) ---------- */
+        .modal {
+            position: fixed; inset: 0; z-index: var(--z-modal);
+            display: none; background: var(--color-scrim);
+        }
+        .modal.show { display: grid; place-items: center; }
+        .modal-content {
+            position: relative; width: 100%; height: 100%; overflow-y: auto;
+            padding: var(--space-md); padding-top: max(var(--space-md), env(safe-area-inset-top));
+            padding-bottom: max(var(--space-md), env(safe-area-inset-bottom));
+            background: var(--color-paper); color: var(--color-ink);
+            animation: modalIn var(--dur-long) var(--ease-out);
+        }
+        @keyframes modalIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: none; } }
+        .modal-content h2 { font-size: var(--text-md); margin-bottom: var(--space-md); padding-right: var(--space-xl); }
+        .modal-close {
+            position: sticky; top: 0; float: right; z-index: var(--z-raised); margin-left: var(--space-xs);
+            display: inline-grid; place-items: center; width: var(--control-h); height: var(--control-h);
+            border: 1px solid var(--color-rule); border-radius: var(--radius-pill);
+            background: var(--color-paper-2); color: var(--color-ink); cursor: pointer;
+        }
+        @media (hover: hover) { .modal-close:hover { background: var(--color-paper-3); } }
+
+        /* Poll */
+        #pollQuestion { font-size: var(--text-md); font-weight: 700; margin-bottom: var(--space-md); }
+        .poll-option, .poll-result {
+            display: block; width: 100%; text-align: left; margin-bottom: var(--space-xs);
+            padding: var(--space-sm) var(--space-md); border: 1px solid var(--color-rule); border-radius: var(--radius-md);
+            background: var(--color-paper-2); cursor: pointer; font-size: var(--text-sm);
+        }
+        .poll-result { display: flex; justify-content: space-between; align-items: center; cursor: default; }
+        @media (hover: hover) { .poll-option:hover { border-color: var(--color-accent); } }
+        .poll-option.voted { border-color: var(--color-success); }
+        .poll-result-bar { height: 4px; margin-top: var(--space-xs); border-radius: var(--radius-pill); background: var(--color-accent); }
+
+        /* GIF picker */
+        .gif-search { width: 100%; }
+        /* Masonry: GIFs keep their own shapes; columns fill top-to-bottom. */
+        .gif-grid { columns: 3 8.5rem; column-gap: var(--space-xs); } /* 2 columns on phones, 3 in the dialog */
+        .gif-item, .gif-skeleton {
+            display: block; width: 100%; margin-bottom: var(--space-xs); break-inside: avoid;
+            border-radius: var(--radius-sm); background: var(--color-paper-2);
+        }
+        .gif-item { padding: 0; border: 0; cursor: pointer; overflow: hidden; }
+        .gif-item img { display: block; width: 100%; height: auto; }
+        @media (hover: hover) { .gif-item:hover { outline: 2px solid var(--color-accent); outline-offset: 1px; } }
+        .gif-skeleton { animation: gifPulse 1.2s var(--ease-in-out) infinite alternate; }
+        @keyframes gifPulse { from { opacity: 0.55; } to { opacity: 1; } }
+        #gifSentinel { height: 1px; }
+        .gif-note { color: var(--color-muted); font-size: var(--text-xs); margin-top: var(--space-sm); }
+        .gif-note b { color: var(--color-ink); }
+
+        /* ---------- Browse (Stremio-compatible addons) ---------- */
+        .browse-tabs, .browse-bar, .addon-add, .sub-timing { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-xs); }
+        .browse-tabs { margin-bottom: var(--space-md); padding-right: var(--space-xl); }
+        .browse-bar { margin-bottom: var(--space-sm); }
+        .tab-btn, .chip {
+            flex: none; display: inline-flex; align-items: center; height: var(--control-h); padding: 0 var(--space-md);
+            border: 1px solid var(--color-rule); border-radius: var(--radius-pill);
+            background: var(--color-paper-2); color: var(--color-ink);
+            font-size: var(--text-sm); font-weight: 700; white-space: nowrap; cursor: pointer;
+        }
+        .tab-btn.active, .chip.active { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-paper); }
+        @media (hover: hover) { .tab-btn:not(.active):hover, .chip:not(.active):hover { border-color: var(--color-rule-2); } }
+        .chip-refresh { padding: 0; width: var(--control-h); justify-content: center; }
+        .type-toggle { display: flex; padding: var(--space-3xs); border: 1px solid var(--color-rule); border-radius: var(--radius-pill); }
+        .type-toggle button {
+            height: calc(var(--control-h) - 6px); padding: 0 var(--space-md); border: 0; border-radius: var(--radius-pill);
+            background: transparent; color: var(--color-muted); font-size: var(--text-sm); font-weight: 700; cursor: pointer;
+        }
+        .type-toggle button.active { background: var(--color-paper-3); color: var(--color-ink); }
+        .browse-select { flex: 1; min-width: 10rem; max-width: 18rem; }
+        .browse-input { flex: 1 1 100%; }
+        .browse-status { color: var(--color-muted); font-size: var(--text-sm); margin: var(--space-xs) 0 var(--space-sm); min-height: 1lh; }
+        .spinner {
+            display: inline-block; width: 14px; height: 14px; margin-right: var(--space-xs); vertical-align: -2px;
+            border: 2px solid var(--color-rule); border-top-color: var(--color-accent); border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .poster-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 6.5rem), 1fr)); gap: var(--space-sm) var(--space-xs); }
+        .poster-card {
+            display: block; width: 100%; min-width: 0; padding: 0; border: 0; background: none; color: inherit;
+            text-align: left; cursor: pointer; border-radius: var(--radius-md);
+        }
+        .poster-card img, .poster-fallback {
+            width: 100%; aspect-ratio: 2 / 3; object-fit: cover; display: block;
+            border-radius: var(--radius-md); background: var(--color-paper-2);
+        }
+        .poster-fallback { display: grid; place-items: center; color: var(--color-muted); }
+        .poster-fallback .icon { width: 2rem; height: 2rem; }
+        .poster-title { font-size: var(--text-xs); line-height: 1.35; padding-top: var(--space-xs); color: var(--color-muted); overflow-wrap: anywhere; }
+        @media (hover: hover) {
+            .poster-card img { transition: transform var(--dur-short) var(--ease-out); }
+            .poster-card:hover img { transform: translateY(-2px); }
+            .poster-card:hover .poster-title { color: var(--color-ink); }
+        }
+
+        .back-btn {
+            display: inline-flex; align-items: center; gap: var(--space-2xs); height: var(--control-h);
+            margin-bottom: var(--space-sm); border: 0; background: none; color: var(--color-muted);
+            font-size: var(--text-sm); font-weight: 700; cursor: pointer;
+        }
+        @media (hover: hover) { .back-btn:hover { color: var(--color-ink); } }
+        .detail-head { display: flex; gap: var(--space-md); align-items: flex-start; margin-bottom: var(--space-md); }
+        .detail-head img { width: 5.5rem; border-radius: var(--radius-md); flex: none; }
+        .detail-head h3 { font-size: var(--text-md); overflow-wrap: anywhere; }
+        .detail-head > div { min-width: 0; }
+        .episode-list { display: grid; gap: var(--space-2xs); max-height: 15rem; overflow-y: auto; margin: var(--space-xs) 0 var(--space-md); }
+        .episode-btn {
+            text-align: left; min-height: var(--control-h); padding: var(--space-xs) var(--space-sm);
+            border: 1px solid var(--color-rule); border-radius: var(--radius-sm);
+            background: var(--color-paper); font-size: var(--text-sm); cursor: pointer;
+        }
+        .episode-btn.active { border-color: var(--color-accent); }
+        @media (hover: hover) { .episode-btn:hover { background: var(--color-paper-2); } }
+
+        .source-chips { display: flex; gap: var(--space-xs); overflow-x: auto; padding: var(--space-2xs) 0 var(--space-sm); scrollbar-width: none; }
+        .source-chips::-webkit-scrollbar { display: none; }
+
+        .stream-list { display: grid; gap: var(--space-xs); }
+        .stream-row {
+            display: block; width: 100%; text-align: left; padding: var(--space-sm) var(--space-md);
+            border: 1px solid var(--color-rule); border-radius: var(--radius-md);
+            background: var(--color-paper); cursor: pointer;
+        }
+        @media (hover: hover) { .stream-row:hover { background: var(--color-paper-2); border-color: var(--color-rule-2); } }
+        .stream-row.active { border-color: var(--color-success); }
+        .stream-top { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-xs); margin-bottom: var(--space-2xs); font-size: var(--text-xs); }
+        .stream-audio { display: inline-flex; align-items: center; gap: var(--space-2xs); color: var(--color-ink); }
+        .stream-audio::before {
+            content: ""; width: 0.875rem; height: 0.875rem; background: currentColor;
+            -webkit-mask: var(--mask-volume) center / contain no-repeat; mask: var(--mask-volume) center / contain no-repeat;
+        }
+        .stream-size, .stream-addon { color: var(--color-muted); }
+        .stream-desc { font-size: var(--text-xs); color: var(--color-muted); line-height: 1.45; overflow-wrap: anywhere; }
+
+        /* Stream badges (badges.js). Logos sit on a light chip so dark logos stay visible. */
+        .badges { display: inline-flex; flex-wrap: wrap; gap: var(--space-2xs); align-items: center; }
+        .badge {
+            display: inline-flex; align-items: center; height: 1.25rem; padding: 0 var(--space-xs);
+            border: 1px solid var(--color-rule); border-radius: var(--radius-sm);
+            font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.02em; white-space: nowrap; color: var(--color-ink);
+        }
+        .badge-logo { background: var(--color-logo-chip); border-color: var(--color-logo-rule); padding: 0 var(--space-2xs); }
+        .badge-logo img { height: 0.875rem; width: auto; max-width: 4.5rem; display: block; }
+        .badge-res { background: var(--color-accent); border-color: var(--color-accent); color: var(--color-accent-ink); }
+        .badge-hdr { background: var(--color-amber); border-color: var(--color-amber); color: var(--color-amber-ink); }
+        .badge-src { color: var(--color-info); border-color: var(--color-info); }
+        .badge-aud { color: var(--color-violet); border-color: var(--color-violet); }
+        .badge-ch { color: var(--color-muted); }
+        .badge-codec { background: var(--color-paper-2); }
+        .badge-ed { color: var(--color-amber); border-color: var(--color-amber); }
+        .badge-warn { background: var(--color-error); border-color: var(--color-error); color: var(--color-error-ink); }
+
+        /* Addons manager */
+        .addon-row {
+            display: flex; align-items: center; justify-content: space-between; gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-md); margin-bottom: var(--space-xs);
+            border: 1px solid var(--color-rule); border-radius: var(--radius-md);
+        }
+        .addon-info { min-width: 0; }
+        .addon-name { font-weight: 700; font-size: var(--text-sm); }
+        .addon-meta { color: var(--color-muted); font-size: var(--text-xs); overflow-wrap: anywhere; }
+        .addon-remove {
+            flex: none; height: 2rem; padding: 0 var(--space-sm); border: 1px solid var(--color-error); border-radius: var(--radius-pill);
+            background: transparent; color: var(--color-error); font-size: var(--text-xs); font-weight: 700; cursor: pointer;
+        }
+        .addon-add { margin: var(--space-md) 0 var(--space-2xs); }
+        .addon-add .browse-input { flex: 1 1 14rem; }
+        .addon-help { color: var(--color-muted); font-size: var(--text-xs); line-height: 1.6; margin-top: var(--space-sm); max-width: 65ch; }
+
+        /* Subtitles / audio picker (tracks.js) */
+        #trackModalBody h2 { margin-bottom: var(--space-sm); }
+        .sub-list { max-height: 16rem; overflow-y: auto; margin-bottom: var(--space-sm); }
+        .sub-now {
+            display: flex; align-items: center; gap: var(--space-xs); margin-bottom: var(--space-sm);
+            font-size: var(--text-sm); color: var(--color-muted);
+        }
+        .sub-now b { color: var(--color-ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+        .sub-now .icon { width: 1rem; height: 1rem; flex: none; }
+        .sub-now.on .icon { color: var(--color-accent); }
+        .sub-section { margin: var(--space-md) 0 var(--space-xs); color: var(--color-muted); font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+        .sub-timing { margin: 0 0 var(--space-md); font-size: var(--text-sm); }
+        .stepper { display: inline-flex; align-items: center; border: 1px solid var(--color-rule); border-radius: var(--radius-pill); }
+        .stepper button {
+            display: inline-grid; place-items: center; width: var(--control-h); height: var(--control-h);
+            border: 0; background: transparent; color: var(--color-ink); font-size: var(--text-md); font-weight: 700; cursor: pointer; border-radius: 50%;
+        }
+        @media (hover: hover) { .stepper button:hover { background: var(--color-paper-2); } }
+        .sub-offset { min-width: 3.5rem; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; }
+        .sub-timing .addon-help { flex-basis: 100%; margin-top: var(--space-2xs); }
+        .sub-file { display: inline-flex; gap: var(--space-xs); }
+
+        /* ---------- Voice room ---------- */
+        .voice-panel {
+            position: fixed; right: var(--space-xs); bottom: var(--space-xs); z-index: var(--z-call);
+            width: min(21rem, calc(100% - 2 * var(--space-xs)));
+            display: none; overflow: hidden;
+            border: 1px solid var(--color-rule); border-radius: var(--radius-lg); background: var(--color-paper-2);
+            box-shadow: 0 8px 24px var(--color-shadow);
+        }
+        .voice-panel.show { display: block; }
+        .voice-head {
+            display: flex; align-items: center; gap: var(--space-xs);
+            padding: var(--space-xs) var(--space-xs) var(--space-xs) var(--space-md);
+            border-bottom: 1px solid var(--color-rule); font-size: var(--text-sm);
+            cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none;
+        }
+        .voice-panel.dragging { box-shadow: 0 16px 40px var(--color-shadow); }
+        .voice-panel.dragging .voice-head { cursor: grabbing; }
+        .voice-grip { display: inline-flex; gap: 2px; margin-right: var(--space-2xs); color: var(--color-muted); }
+        .voice-grip::before, .voice-grip::after { content: ""; width: 3px; height: 12px; border-radius: 2px;
+            background: radial-gradient(circle, currentColor 1.2px, transparent 1.4px) 0 0 / 3px 4px; }
+        .voice-head b { font-weight: 700; }
+        .voice-head .mono { color: var(--color-muted); }
+        .voice-panel.collapsed { width: auto; }
+        .voice-panel.collapsed .voice-head { border-bottom: 0; }
+        .voice-head .icon-btn .icon { transition: transform var(--dur-short) var(--ease-out); }
+        .voice-panel.collapsed .voice-head .icon-btn .icon { transform: rotate(180deg); }
+        .voice-grid {
+            display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-xs);
+            padding: var(--space-xs); max-height: min(40dvh, 22rem); overflow-y: auto;
+        }
+        .voice-panel.collapsed .voice-grid { display: none; }
+        .voice-tile {
+            position: relative; aspect-ratio: 4 / 3; overflow: hidden; display: grid; place-items: center;
+            border-radius: var(--radius-sm); background: var(--color-stage); color: var(--color-stage-ink);
+            outline: 2px solid transparent; outline-offset: -2px;
+            transition: outline-color var(--dur-short) var(--ease-out);
+        }
+        .voice-tile.speaking { outline-color: var(--color-success); }
+        .voice-tile video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
+        .voice-tile.has-video video { display: block; }
+        .voice-tile.me video { transform: scaleX(-1); }
+        .voice-tile.has-video .voice-avatar { visibility: hidden; }
+        .voice-avatar {
+            display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 50%;
+            background: var(--color-accent); color: var(--color-accent-ink); font-weight: 700; font-size: var(--text-base);
+        }
+        .voice-name {
+            position: absolute; left: var(--space-3xs); bottom: var(--space-3xs); max-width: calc(100% - var(--space-xs));
+            display: inline-flex; align-items: center; gap: var(--space-3xs);
+            padding: 0 var(--space-xs); border-radius: var(--radius-pill);
+            background: var(--color-scrim); color: var(--color-stage-ink); font-size: var(--text-xs); line-height: 1.6;
+        }
+        .voice-name .n { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .voice-muted { display: none; width: 0.85rem; height: 0.85rem; color: var(--color-error); flex: none; }
+        .voice-tile.is-muted .voice-muted { display: inline-block; }
+        .call-controls { display: flex; gap: var(--space-2xs); margin-left: auto; padding-left: var(--space-xs); }
+        .call-btn {
+            display: inline-grid; place-items: center; width: 2.25rem; height: 2.25rem;
+            border: 1px solid var(--color-rule); border-radius: 50%; background: var(--color-paper-3); color: var(--color-ink); cursor: pointer;
+        }
+        @media (pointer: coarse) { .call-btn { width: 2.5rem; height: 2.5rem; } }
+        .call-btn .icon { width: 1.1rem; height: 1.1rem; }
+        .call-btn.off { background: var(--color-paper); color: var(--color-error); border-color: var(--color-error); }
+        .call-btn.hangup { background: var(--color-error); border-color: var(--color-error); color: var(--color-error-ink); }
+        #callBtn.is-on, #callBtn.has-people { border-color: var(--color-success); }
+        #callBtn.is-on .icon, #callBtn.has-people .icon { color: var(--color-success); }
+
+        @media (min-width: 25rem) {
+            .conn-text { position: static; width: auto; height: auto; overflow: visible; clip: auto; }
+        }
+
+        /* ---------- ≥ 40rem: room for labels ---------- */
+        @media (min-width: 40rem) {
+            .e2e { display: inline-flex; }
+            .pinned { display: inline-flex; }
+            .pinned-sep { display: inline; }
+            .video-controls { display: flex; flex-wrap: wrap; }
+            .video-controls #fullscreenBtn { order: 99; margin-left: auto; }
+            .video-controls #fullscreenBtn .label { display: inline; }
+            .video-controls .btn { padding: 0 var(--space-md); }
+            .top-actions .btn .label { display: inline; }
+            .top-actions .btn { padding: 0 var(--space-md); width: auto; }
+            .unread { position: static; }
+            .stage { padding: var(--space-lg); }
+            .post { gap: var(--space-md); }
+            .poster-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 8rem), 1fr)); gap: var(--space-md) var(--space-sm); }
+            .detail-head img { width: 7rem; }
+            .voice-panel { right: var(--space-lg); bottom: var(--space-lg); }
+        }
+
+        /* ---------- ≥ 48rem: modals become dialogs ---------- */
+        @media (min-width: 48rem) {
+            .modal-content {
+                width: min(36rem, 92%); height: auto; max-height: 84dvh; padding: var(--space-lg);
+                border: 1px solid var(--color-rule); border-radius: var(--radius-lg);
+            }
+            .modal-content.wide { width: min(60rem, 94%); max-height: 88dvh; }
+        }
+
+        /* ---------- ≥ 60rem: Stage + Rail ---------- */
+        @media (min-width: 60rem) {
+            /* the comments rail owns the right edge; voice sits bottom-left over the stage */
+            .voice-panel { right: auto; left: var(--space-lg); }
+            .shell { grid-template-columns: minmax(0, 1fr) var(--rail-w); }
+            .topbar { grid-column: 1 / -1; }
+            .shell.rail-collapsed { grid-template-columns: minmax(0, 1fr) 0; }
+            .shell.rail-collapsed .rail { display: none; }
+            .rail {
+                position: sticky; top: var(--topbar-h); z-index: var(--z-base);
+                height: calc(100dvh - var(--topbar-h));
+                border-top: 0; border-left: 1px solid var(--color-rule); border-radius: 0; box-shadow: none;
+                transform: none; visibility: visible; transition: none;
+            }
+            .sheet-grabber, .sheet-close { display: none; }
+            .chat-header { padding-top: var(--space-sm); }
+            .stage { padding: var(--space-lg) var(--space-xl); }
+            #videoPlayer { max-height: calc(100dvh - 15rem); }
+            .now-playing { font-size: var(--text-lg); }
+        }
+        @media (min-width: 90rem) {
+            :root { --rail-w: 24rem; }
+        }
+
+        /* ---------- Full-screen (theater) mode ----------
+         * The video fills the screen; comments become a see-through panel that
+         * drops down from the top-right and tucks back up behind the corner icon.
+         * Placed after the breakpoints so it wins over the rail/sheet layouts. */
+        .theater-bar, .chat-tuck { display: none; }
+        .shell.theater {
+            position: fixed; inset: 0; z-index: var(--z-sticky); display: block;
+            background: var(--color-stage); min-height: 0; overflow: hidden;
+        }
+        .shell.theater .topbar,
+        .shell.theater .post-meta,
+        .shell.theater .now-playing,
+        .shell.theater .player-status,
+        .shell.theater .video-controls { display: none; }
+        .shell.theater .stage, .shell.theater .post, .shell.theater .player-wrap { padding: 0; height: 100%; max-width: none; }
+        .shell.theater #videoPlayer {
+            width: 100%; height: 100dvh; max-height: none; aspect-ratio: auto; border-radius: 0;
+        }
+        .shell.theater .theater-bar {
+            position: fixed; z-index: calc(var(--z-sheet) + 1); display: flex; gap: var(--space-xs);
+            top: max(var(--space-sm), env(safe-area-inset-top)); right: max(var(--space-sm), env(safe-area-inset-right));
+            transition: opacity var(--dur-long) var(--ease-out);
+        }
+        .shell.theater.idle:not(.theater-chat) .theater-bar { opacity: 0; pointer-events: none; }
+        .theater-btn {
+            position: relative; display: inline-grid; place-items: center;
+            width: var(--control-h); height: var(--control-h); border-radius: 50%;
+            border: 1px solid var(--color-glass-rule); background: var(--color-scrim); color: var(--color-stage-ink);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); cursor: pointer;
+        }
+        .theater-btn[aria-expanded="true"] { background: var(--color-stage-ink); color: var(--color-stage); }
+        @media (hover: hover) { .theater-btn:hover { border-color: var(--color-stage-ink); } }
+        .theater-btn .unread { top: -4px; right: -4px; }
+        .shell.theater .rail,
+        .shell.theater.rail-collapsed .rail,
+        .shell.theater.sheet-open .rail {
+            display: block; position: fixed; z-index: var(--z-sheet);
+            top: calc(max(var(--space-sm), env(safe-area-inset-top)) + var(--control-h) + var(--space-xs));
+            right: max(var(--space-sm), env(safe-area-inset-right)); left: auto; bottom: auto;
+            width: min(22rem, calc(100% - 2 * var(--space-sm))); height: min(62dvh, 34rem);
+            border: 1px solid var(--color-glass-rule); border-radius: var(--radius-lg);
+            background: var(--color-glass); box-shadow: 0 12px 32px var(--color-shadow);
+            backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2);
+            transform: translateY(calc(-100% - 5rem)); opacity: 0; visibility: hidden;
+            transition: transform calc(var(--dur-long) * 0.75) var(--ease-in), opacity calc(var(--dur-long) * 0.75) var(--ease-in),
+                visibility 0s linear calc(var(--dur-long) * 0.75);
+        }
+        .shell.theater.theater-chat .rail {
+            transform: none; opacity: 1; visibility: visible;
+            transition: transform var(--dur-long) var(--ease-out), opacity var(--dur-short) var(--ease-out), visibility 0s;
+        }
+        .shell.theater .chat-header { background: transparent; }
+        .shell.theater .sheet-grabber, .shell.theater .sheet-close { display: none; }
+        .shell.theater .chat-container { position: relative; }
+        .shell.theater .chat-tuck {
+            display: inline-grid; place-items: center; position: absolute; left: 50%; top: calc(100% + var(--space-xs));
+            transform: translateX(-50%); width: 2.25rem; height: 2.25rem; border-radius: 50%;
+            border: 1px solid var(--color-glass-rule); background: var(--color-accent); color: var(--color-accent-ink);
+            box-shadow: 0 4px 12px var(--color-shadow); cursor: pointer;
+        }
+        .shell.theater .chat-tuck .icon { width: 1.1rem; height: 1.1rem; }
+
+        /* ---------- Reduced motion ---------- */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 150ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 150ms !important;
+            }
+            .rail, .shell.sheet-open .rail { transition: opacity 150ms linear, visibility 0s; }
+            .spinner { animation-iteration-count: infinite !important; animation-duration: 1.6s !important; }
+        }
+    </style>
+
+    <script>
+        // Apply saved theme before paint to avoid a flash. Default: dark.
+        (function () {
+            var t = null;
+            try { t = localStorage.getItem('reddate-theme'); } catch (e) {}
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+    <!-- Icons: Lucide (ISC License, lucide.dev), embedded so nothing loads from a third party. -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+        <symbol id="i-play" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3" /></symbol>
+        <symbol id="i-pause" viewBox="0 0 24 24"><rect x="14" y="4" width="4" height="16" rx="1" /> <rect x="6" y="4" width="4" height="16" rx="1" /></symbol>
+        <symbol id="i-refresh-cw" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" /> <path d="M21 3v5h-5" /> <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" /> <path d="M8 16H3v5" /></symbol>
+        <symbol id="i-popcorn" viewBox="0 0 24 24"><path d="M18 8a2 2 0 0 0 0-4 2 2 0 0 0-4 0 2 2 0 0 0-4 0 2 2 0 0 0-4 0 2 2 0 0 0 0 4" /> <path d="M10 22 9 8" /> <path d="m14 22 1-14" /> <path d="M20 8c.5 0 .9.4.8 1l-2.6 12c-.1.5-.7 1-1.2 1H7c-.6 0-1.1-.4-1.2-1L3.2 9c-.1-.6.3-1 .8-1Z" /></symbol>
+        <symbol id="i-captions" viewBox="0 0 24 24"><rect width="18" height="14" x="3" y="5" rx="2" ry="2" /> <path d="M7 15h4M15 15h2M7 11h2M13 11h4" /></symbol>
+        <symbol id="i-volume-2" viewBox="0 0 24 24"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z" /> <path d="M16 9a5 5 0 0 1 0 6" /> <path d="M19.364 18.364a9 9 0 0 0 0-12.728" /></symbol>
+        <symbol id="i-video" viewBox="0 0 24 24"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5" /> <rect x="2" y="6" width="14" height="12" rx="2" /></symbol>
+        <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /> <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></symbol>
+        <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" /> <path d="M12 2v2" /> <path d="M12 20v2" /> <path d="m4.93 4.93 1.41 1.41" /> <path d="m17.66 17.66 1.41 1.41" /> <path d="M2 12h2" /> <path d="M20 12h2" /> <path d="m6.34 17.66-1.41 1.41" /> <path d="m19.07 4.93-1.41 1.41" /></symbol>
+        <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" /></symbol>
+        <symbol id="i-message-square" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></symbol>
+        <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18" /> <path d="m6 6 12 12" /></symbol>
+        <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6" /></symbol>
+        <symbol id="i-arrow-big-up" viewBox="0 0 24 24"><path d="M9 18v-6H5l7-7 7 7h-4v6H9z" /></symbol>
+        <symbol id="i-arrow-big-down" viewBox="0 0 24 24"><path d="M15 6v6h4l-7 7-7-7h4V6h6z" /></symbol>
+        <symbol id="i-image" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /> <circle cx="9" cy="9" r="2" /> <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" /></symbol>
+        <symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" /> <path d="M19 10v2a7 7 0 0 1-14 0v-2" /> <line x1="12" x2="12" y1="19" y2="22" /></symbol>
+        <symbol id="i-mic-off" viewBox="0 0 24 24"><line x1="2" x2="22" y1="2" y2="22" /> <path d="M18.89 13.23A7.12 7.12 0 0 0 19 12v-2" /> <path d="M5 10v2a7 7 0 0 0 12 5" /> <path d="M15 9.34V5a3 3 0 0 0-5.68-1.33" /> <path d="M9 9v3a3 3 0 0 0 5.12 2.12" /> <line x1="12" x2="12" y1="19" y2="22" /></symbol>
+        <symbol id="i-video-off" viewBox="0 0 24 24"><path d="M10.66 6H14a2 2 0 0 1 2 2v2.5l5.248-3.062A.5.5 0 0 1 22 7.87v8.196" /> <path d="M16 16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2" /> <path d="m2 2 20 20" /></symbol>
+        <symbol id="i-maximize" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3" /> <path d="M21 8V5a2 2 0 0 0-2-2h-3" /> <path d="M3 16v3a2 2 0 0 0 2 2h3" /> <path d="M16 21h3a2 2 0 0 0 2-2v-3" /></symbol>
+        <symbol id="i-minimize" viewBox="0 0 24 24"><path d="M8 3v3a2 2 0 0 1-2 2H3" /> <path d="M21 8h-3a2 2 0 0 1-2-2V3" /> <path d="M3 16h3a2 2 0 0 1 2 2v3" /> <path d="M16 21v-3a2 2 0 0 1 2-2h3" /></symbol>
+        <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="m5 12 7-7 7 7" /> <path d="M12 19V5" /></symbol>
+        <symbol id="i-headphones" viewBox="0 0 24 24"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3" /></symbol>
+        <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <polyline points="17 8 12 3 7 8" /> <line x1="12" x2="12" y1="3" y2="15" /></symbol>
+        <symbol id="i-coffee" viewBox="0 0 24 24"><path d="M10 2v2" /> <path d="M14 2v2" /> <path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1" /> <path d="M6 2v2" /></symbol>
+        <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></symbol>
+        <symbol id="i-phone-off" viewBox="0 0 24 24"><path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.42 19.42 0 0 1-3.33-2.67m-2.67-3.34a19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91" /> <line x1="22" x2="2" y1="2" y2="22" /></symbol>
+        <symbol id="i-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /> <path d="M7 11V7a5 5 0 0 1 10 0v4" /></symbol>
+        <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 17v5" /> <path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z" /></symbol>
+        <symbol id="i-film" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" /> <path d="M7 3v18" /> <path d="M3 7.5h4" /> <path d="M3 12h18" /> <path d="M3 16.5h4" /> <path d="M17 3v18" /> <path d="M17 7.5h4" /> <path d="M17 16.5h4" /></symbol>
+    </svg>
+    <div class="rain-container" id="rainContainer"></div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <!-- Lobby -->
+    <div class="lobby" id="lobby">
+        <div class="lobby-card">
+            <span class="wordmark">r/Reddate</span>
+            <p class="lobby-tagline" id="lobbyTagline">Start a thread, drop a video, and watch together — privately.</p>
+            <div class="field">
+                <label class="field-label" for="usernameInput">Pick a username</label>
+                <input type="text" class="lobby-input" id="usernameInput" placeholder="throwaway_42" maxlength="40" autocomplete="off">
+            </div>
+            <button class="btn btn-primary" id="lobbyBtn">Create a room</button>
+            <a class="lobby-support" id="supportLobby" href="#" target="_blank" rel="noopener noreferrer" hidden>
+                <svg class="icon" aria-hidden="true"><use href="#i-coffee"/></svg>Enjoying it? Buy me a coffee
+            </a>
+            <p class="privacy-note">
+                <svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>
+                <span><b>End-to-end encrypted.</b> Chats aren’t stored — only anonymous visit counts.</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- App: Stage (the video post) + Rail (comments) -->
+    <div class="shell hidden" id="app">
+        <header class="topbar">
+            <span class="wordmark">r/Reddate</span>
+            <div class="room-meta">
+                <span class="conn">
+                    <span class="status-indicator disconnected" id="connectionStatus"></span>
+                    <span id="connectionText" class="conn-text">Connecting…</span>
+                </span>
+                <span class="e2e">
+                    <svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>
+                    End-to-end encrypted
+                </span>
+            </div>
+            <div class="top-actions">
+                <button class="btn btn-ghost" id="shareBtn" aria-label="Copy invite link" title="Copy invite link">
+                    <svg class="icon" aria-hidden="true"><use href="#i-link"/></svg><span class="label">Copy invite</span>
+                </button>
+                <a class="btn btn-ghost support-link" id="supportTop" href="#" target="_blank" rel="noopener noreferrer" hidden title="Buy me a coffee" aria-label="Buy me a coffee">
+                    <svg class="icon" aria-hidden="true"><use href="#i-coffee"/></svg><span class="label">Buy me a coffee</span>
+                </a>
+                <button class="icon-btn" id="themeToggle" aria-label="Switch to light theme" title="Switch to light theme">
+                    <svg class="icon" aria-hidden="true"><use href="#i-sun"/></svg>
+                </button>
+                <button class="btn btn-ghost chat-toggle" id="chatToggle" aria-controls="chatPanel" aria-expanded="true" title="Comments">
+                    <svg class="icon" aria-hidden="true"><use href="#i-message-square"/></svg><span class="label">Comments</span>
+                    <span class="unread" id="chatUnread" hidden>0</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Full-screen mode: a corner bar (comments + exit) over the video -->
+        <div class="theater-bar" id="theaterBar">
+            <button class="theater-btn" id="theaterChatBtn" aria-controls="chatPanel" aria-expanded="false" aria-label="Comments" title="Comments">
+                <svg class="icon" aria-hidden="true"><use href="#i-message-square"/></svg>
+                <span class="unread" id="theaterUnread" hidden>0</span>
+            </button>
+            <button class="theater-btn" id="theaterExitBtn" aria-label="Exit full screen" title="Exit full screen">
+                <svg class="icon" aria-hidden="true"><use href="#i-minimize"/></svg>
+            </button>
+        </div>
+
+        <main class="stage">
+            <article class="post">
+                <div class="post-meta">
+                    <span class="op-tag">OP</span>
+                    <span id="postAuthor">Posted by u/…</span>
+                    <span aria-hidden="true">·</span>
+                    <span>just now</span>
+                    <span class="pinned-sep" aria-hidden="true">·</span>
+                    <span class="pinned"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg>Pinned</span>
+                    <div class="upvote-section">
+                        <button class="arrow" id="upvoteArrow" aria-label="Upvote" title="Upvote">
+                            <svg class="icon" aria-hidden="true"><use href="#i-arrow-big-up"/></svg>
+                        </button>
+                        <span class="vote-count mono" id="voteCount">1</span>
+                        <button class="arrow" id="downvoteArrow" aria-label="Downvote" title="Downvote">
+                            <svg class="icon" aria-hidden="true"><use href="#i-arrow-big-down"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <h1 class="now-playing" id="nowPlaying"></h1>
+                <div class="player-status" id="playerStatus" aria-live="polite"></div>
+
+                <div class="player-wrap">
+                    <div id="videoPlayer"></div>
+                    <div class="player-empty">
+                        <span class="empty-icon"><svg class="icon" aria-hidden="true"><use href="#i-film"/></svg></span>
+                        <p><b>Nothing's playing yet</b>Pick a movie or show, a YouTube video, or paste a link.</p>
+                        <button class="btn" id="emptyBrowseBtn">
+                            <svg class="icon" aria-hidden="true"><use href="#i-popcorn"/></svg>Browse
+                        </button>
+                    </div>
+                </div>
+
+                <div class="video-controls">
+                    <button class="btn btn-primary browse" id="browseBtn">
+                        <svg class="icon" aria-hidden="true"><use href="#i-popcorn"/></svg><span class="label">Browse</span>
+                    </button>
+                    <button class="btn" id="fullscreenBtn" aria-label="Full screen" title="Full screen">
+                        <svg class="icon" aria-hidden="true"><use href="#i-maximize"/></svg><span class="label">Full screen</span>
+                    </button>
+                    <button class="btn" id="playPauseBtn">
+                        <svg class="icon" aria-hidden="true"><use href="#i-play"/></svg><span class="label">Play</span>
+                    </button>
+                    <button class="btn" id="syncBtn">
+                        <svg class="icon" aria-hidden="true"><use href="#i-refresh-cw"/></svg><span class="label">Sync</span>
+                    </button>
+                    <button class="btn" id="subsBtn" style="display:none;">
+                        <svg class="icon" aria-hidden="true"><use href="#i-captions"/></svg><span class="label">Subtitles</span>
+                    </button>
+                    <button class="btn" id="audioBtn" style="display:none;">
+                        <svg class="icon" aria-hidden="true"><use href="#i-volume-2"/></svg><span class="label">Audio</span>
+                    </button>
+                    <button class="btn" id="callBtn">
+                        <svg class="icon" aria-hidden="true"><use href="#i-headphones"/></svg><span class="label">Lounge</span>
+                    </button>
+                </div>
+
+            </article>
+        </main>
+
+        <aside class="rail" id="chatPanel" aria-label="Comments">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <span class="sheet-grabber" aria-hidden="true"></span>
+                    <h2>Join the conversation <span class="live-indicator">Live</span></h2>
+                    <span class="user-count mono" id="userCount">0 online</span>
+                    <button class="icon-btn sheet-close" id="chatClose" aria-label="Close comments">
+                        <svg class="icon" aria-hidden="true"><use href="#i-x"/></svg>
+                    </button>
+                </div>
+                <div class="chat-messages" id="chatMessages" aria-live="polite"></div>
+                <button class="chat-tuck" id="chatTuck" aria-label="Hide comments" title="Hide comments">
+                    <svg class="icon" aria-hidden="true"><use href="#i-arrow-up"/></svg>
+                </button>
+                <div class="typing-indicator" id="typingIndicator" style="display:none;"></div>
+                <div class="chat-input-container">
+                    <button class="icon-btn" id="imgBtn" aria-label="Add image" title="Add image">
+                        <svg class="icon" aria-hidden="true"><use href="#i-image"/></svg>
+                    </button>
+                    <button class="icon-btn gif-btn" id="gifBtn" title="Search GIFs">GIF</button>
+                    <label class="sr-only" for="messageInput">Comment</label>
+                    <input type="text" class="chat-input" id="messageInput" placeholder="What are your thoughts?">
+                    <button class="btn send-btn" id="sendBtn">Comment</button>
+                    <input type="file" id="fileInput" accept="image/*,image/gif" hidden>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Poll Modal -->
+    <div class="modal" id="pollModal">
+        <div class="modal-content">
+            <h2>Quick poll</h2>
+            <div id="pollQuestion"></div>
+            <div id="pollOptions"></div>
+            <div id="pollResults" style="display:none;"></div>
+        </div>
+    </div>
+
+    <!-- GIF picker (Tenor) -->
+    <div class="modal" id="gifModal">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button>
+            <h2>GIFs</h2>
+            <label class="sr-only" for="gifSearch">Search GIFs</label>
+            <input type="search" class="gif-search" id="gifSearch" placeholder="Search GIPHY" autocomplete="off">
+            <div class="browse-status" id="gifStatus" aria-live="polite"></div>
+            <div class="gif-grid" id="gifGrid"></div>
+            <div id="gifSentinel" aria-hidden="true"></div>
+            <div class="gif-note"><b>Powered by GIPHY.</b> GIF searches go to GIPHY and aren't end-to-end encrypted; the GIFs you send are.</div>
+        </div>
+    </div>
+
+    <!-- Browse movies & shows (Stremio-compatible addons) -->
+    <div class="modal" id="browseModal">
+        <div class="modal-content wide">
+            <button class="modal-close" aria-label="Close"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button>
+            <div class="browse-tabs">
+                <button class="tab-btn active" id="browseTabBtn">Browse</button>
+                <button class="tab-btn" id="addonsTabBtn">Addons (0)</button>
+                <button class="tab-btn" id="youtubeTabBtn">YouTube</button>
+                <button class="tab-btn" id="linkTabBtn">Direct link</button>
+            </div>
+
+            <div id="browseView">
+                <div class="browse-bar">
+                    <div class="type-toggle">
+                        <button class="active" data-type="movie">Movies</button>
+                        <button data-type="series">Series</button>
+                    </div>
+                    <select class="browse-select" id="catalogSelect" aria-label="Catalog"></select>
+                    <input type="text" class="browse-input" id="browseSearch" placeholder="Search titles…" aria-label="Search titles">
+                </div>
+                <div class="browse-status" id="browseStatus"></div>
+                <div class="poster-grid" id="posterGrid"></div>
+            </div>
+
+            <div id="detailView" style="display:none;">
+                <button class="back-btn" id="detailBackBtn">
+                    <svg class="icon" aria-hidden="true"><use href="#i-chevron-left"/></svg>Back to browse
+                </button>
+                <div class="detail-head">
+                    <img id="detailPoster" alt="">
+                    <div>
+                        <h3 id="detailTitle"></h3>
+                        <div class="browse-status" id="detailInfo"></div>
+                    </div>
+                </div>
+                <div id="episodePicker" style="display:none;">
+                    <select class="browse-select" id="seasonSelect" aria-label="Season"></select>
+                    <div class="episode-list" id="episodeList"></div>
+                </div>
+                <div class="source-chips" id="sourceChips" style="display:none;"></div>
+                <div class="browse-status" id="streamStatus"></div>
+                <div class="stream-list" id="streamList"></div>
+            </div>
+
+            <div id="youtubeView" style="display:none;">
+                <div class="addon-add">
+                    <input type="text" class="browse-input" id="youtubeUrl" placeholder="https://youtube.com/watch?v=…" aria-label="YouTube link">
+                    <button class="btn btn-primary" id="youtubeLoadBtn">Play for everyone</button>
+                </div>
+                <div class="addon-help">Paste any YouTube video link — youtube.com, youtu.be or Shorts.</div>
+            </div>
+
+            <div id="linkView" style="display:none;">
+                <div class="addon-add">
+                    <input type="text" class="browse-input" id="videoUrl" placeholder="https://…/video.mp4" aria-label="Video link">
+                    <button class="btn btn-primary" id="loadBtn">Play for everyone</button>
+                </div>
+                <div class="addon-help">A direct link to a video file (.mp4, .webm, .mov) or an HLS stream (.m3u8).</div>
+            </div>
+
+            <div id="addonsView" style="display:none;">
+                <div id="addonList"></div>
+                <div class="addon-add">
+                    <input type="text" class="browse-input" id="addonUrlInput" placeholder="https://…/manifest.json" aria-label="Addon manifest URL">
+                    <button class="btn btn-primary" id="addAddonBtn">Add to room</button>
+                </div>
+                <div class="browse-status" id="addonStatus"></div>
+                <div class="addon-help">
+                    Works with Stremio / Nuvio addons. Browsing uses the built-in catalog; to <b>play</b>, paste a
+                    <b>stream</b> addon's manifest URL. You can also add <b>catalog</b> addons for more rows to browse.
+                    Addons are shared with everyone in this room and are <b>end-to-end encrypted</b> — the server never
+                    sees the URLs or any tokens in them. Reddate quickly test-plays each stream and only lists the ones
+                    that actually work in your browser.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subtitles / audio track picker (per viewer, not synced) -->
+    <div class="modal" id="trackModal">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button>
+            <div id="trackModalBody"></div>
+        </div>
+    </div>
+    <input type="file" id="subFileInput" accept=".srt,.vtt,text/vtt,application/x-subrip" hidden>
+
+    <!-- Voice room (Discord-style; anyone in the room can join or leave) -->
+    <section class="voice-panel" id="voicePanel" aria-label="Lounge voice room">
+        <div class="voice-head">
+            <span class="voice-grip" aria-hidden="true"></span><b>Lounge</b><span class="live-indicator">Live</span><span class="mono" id="voiceCount">1</span>
+            <div class="call-controls">
+                <button class="call-btn" id="micBtn" aria-label="Mute microphone" title="Microphone">
+                    <svg class="icon" aria-hidden="true"><use href="#i-mic"/></svg>
+                </button>
+                <button class="call-btn off" id="camBtn" aria-label="Turn camera on" title="Camera">
+                    <svg class="icon" aria-hidden="true"><use href="#i-video-off"/></svg>
+                </button>
+                <button class="call-btn hangup" id="hangupBtn" aria-label="Leave voice" title="Leave voice">
+                    <svg class="icon" aria-hidden="true"><use href="#i-phone-off"/></svg>
+                </button>
+            </div>
+            <button class="icon-btn" id="voiceCollapse" aria-label="Show or hide people in the lounge" aria-expanded="true">
+                <svg class="icon" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+            </button>
+        </div>
+        <div class="voice-grid" id="voiceGrid"></div>
+    </section>
+    <div id="voiceAudio" hidden></div>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/mkv.js"></script>
+    <script src="/badges.js"></script>
+    <script src="/addons.js"></script>
+    <script src="/tracks.js"></script>
+    <script src="/app.js"></script>
+    <script src="/voice.js"></script>
+<div id="rd-new" role="dialog" aria-labelledby="rd-new-h" style="position:fixed;inset:auto 16px 16px auto;max-width:360px;z-index:99999;background:#1d1917;color:#f6f1ea;border:1px solid #3a322d;border-radius:16px;padding:18px 20px;font:500 15px/1.5 system-ui,sans-serif;box-shadow:0 20px 60px rgba(0,0,0,.5)" hidden>
+  <b id="rd-new-h" style="display:block;font-size:17px;margin-bottom:4px">Reddate just got a glow-up.</b>
+  Movie night, upgraded: Top 10 rows, smarter streams and one-press invites. Come see the new Reddate.
+  <div style="display:flex;gap:10px;margin-top:14px;align-items:center">
+    <a href="https://tv.reddate.xyz/download" style="background:#ff6a32;color:#1a0f09;font-weight:700;text-decoration:none;padding:10px 16px;border-radius:999px">Take me there</a>
+    <button type="button" id="rd-new-x" style="background:none;border:0;color:#b8ada1;font:inherit;cursor:pointer">Not now</button>
+  </div>
+</div>
+<script>
+(function(){try{if(localStorage.getItem('rd-new-seen'))return}catch(e){}
+var d=document.getElementById('rd-new');d.hidden=false;
+document.getElementById('rd-new-x').onclick=function(){d.hidden=true;try{localStorage.setItem('rd-new-seen','1')}catch(e){}};})();
+</script>
+
+</body>
+</html>

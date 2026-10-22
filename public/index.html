@@ -1074,15 +1074,17 @@
 <div id="rd-new" role="dialog" aria-labelledby="rd-new-h" style="position:fixed;inset:auto 16px 16px auto;max-width:360px;z-index:99999;background:#1d1917;color:#f6f1ea;border:1px solid #3a322d;border-radius:16px;padding:18px 20px;font:500 15px/1.5 system-ui,sans-serif;box-shadow:0 20px 60px rgba(0,0,0,.5)" hidden>
   <b id="rd-new-h" style="display:block;font-size:17px;margin-bottom:4px">Reddate just got a glow-up.</b>
   Movie night, upgraded: Top 10 rows, smarter streams and one-press invites. Come see the new Reddate.
+  <div style="margin-top:10px;font-size:14px;color:#b8ada1">Updates, help and early builds live on our <a href="https://discord.gg/UubFc9Kw3d" target="_blank" rel="noopener" style="color:#ff9a6e;font-weight:700">Discord</a>.</div>
   <div style="display:flex;gap:10px;margin-top:14px;align-items:center">
     <a href="https://tv.reddate.xyz/download" style="background:#ff6a32;color:#1a0f09;font-weight:700;text-decoration:none;padding:10px 16px;border-radius:999px">Take me there</a>
+    <a href="https://discord.gg/UubFc9Kw3d" target="_blank" rel="noopener" style="background:#5865f2;color:#fff;font-weight:700;text-decoration:none;padding:10px 16px;border-radius:999px">Join Discord</a>
     <button type="button" id="rd-new-x" style="background:none;border:0;color:#b8ada1;font:inherit;cursor:pointer">Not now</button>
   </div>
 </div>
 <script>
-(function(){try{if(localStorage.getItem('rd-new-seen'))return}catch(e){}
+(function(){try{if(localStorage.getItem('rd-new-seen2'))return}catch(e){}
 var d=document.getElementById('rd-new');d.hidden=false;
-document.getElementById('rd-new-x').onclick=function(){d.hidden=true;try{localStorage.setItem('rd-new-seen','1')}catch(e){}};})();
+document.getElementById('rd-new-x').onclick=function(){d.hidden=true;try{localStorage.setItem('rd-new-seen2','1')}catch(e){}};})();
 </script>
 
 </body>

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add addons · Reddate TV</title>
+<meta name="description" content="A beginner-friendly guide to adding catalog, stream and subtitle addons to Reddate TV.">
+<link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Hanken+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/landing.css?v=10">
+<meta property="og:title" content="Add addons · Reddate TV">
+<meta property="og:description" content="How to add catalog and stream addons to Reddate TV.">
+<meta property="og:image" content="https://tv.reddate.xyz/assets/brag.jpg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tv.reddate.xyz/addons-guide">
+<link rel="canonical" href="https://tv.reddate.xyz/addons-guide">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="icon" href="/icons/icon-192.png" sizes="192x192" type="image/png">
+<meta name="theme-color" content="#141110">
+</head>
+<body>
+<header class="bar"><div class="wrap">
+  <a class="brand" href="/"><img src="/assets/logo.svg" alt="">Reddate <b>TV</b></a>
+  <nav aria-label="Pages">
+    <a href="/features">Features</a>
+    <a href="/addons-guide">Add addons</a>
+    <a href="/join">Join a party</a>
+    <a class="pill" href="/#download">Download</a>
+  </nav>
+</div></header>
+<main>
+<div class="wrap page">
+  <p class="eyebrow">Beginner guide</p>
+  <h1>Add your first addons.</h1>
+  <p class="lede">Reddate TV starts empty on purpose: you choose the rows on Home and where videos come from. This takes about five minutes.</p>
+  <div class="prose">
+
+    <h2>First, what is an addon?</h2>
+    <p>An addon is a small web service that answers one question. Reddate TV asks it, and shows the answer. There are three kinds, and you usually want one of each.</p>
+    <ol>
+      <li><b>Catalog addon.</b> Fills Home with rows: trending movies, popular shows, new releases. Without one, Home is empty.</li>
+      <li><b>Stream addon.</b> When you press Play, it returns the list of places the video can come from. Without one, you can browse but not play.</li>
+      <li><b>Subtitle addon.</b> Adds subtitle languages. Optional.</li>
+    </ol>
+    <div class="callout"><b>Reddate does not host or provide any video.</b> Addons are made by other people, and you are responsible for what you use. Add sources you have the right to watch, such as your own libraries and services, public-domain and free-to-watch catalogs, and providers you subscribe to.</div>
+
+    <h2>Step 1 · Find the addon's link</h2>
+    <p>Every addon has a link that ends in <code>manifest.json</code>. That link is all Reddate TV needs.</p>
+    <ol>
+      <li>Go to the addon's own page, or to a community addon list such as <a href="https://stremio-addons.net" rel="noopener">stremio-addons.net</a>. Reddit's addon communities (search for "Stremio addons" or "Nuvio addons") also share lists. Addons made for Stremio work in Reddate TV.</li>
+      <li>Open the addon's page and look for <b>Install</b>, <b>Install to Stremio</b> or <b>Copy link</b>.</li>
+      <li>Use <b>Copy link</b> if there is one. If you only see an Install button, right-click it and copy the link address. A link starting with <code>stremio://</code> works too, and Reddate TV changes it for you.</li>
+    </ol>
+    <div class="callout"><b>Careful with personal links.</b> Some addons put your settings or an account token inside the link. That link is yours. Don't post it publicly.</div>
+
+    <h2>Step 2 · Configure it first, if it asks</h2>
+    <p>Some addons have a <b>Configure</b> page: choose languages, quality, or sign in with a service you subscribe to. Do that first, then use the Install or Copy link button on the page that follows, because the configured link is different from the plain one.</p>
+
+    <h2>Step 3 · Add it in Reddate TV</h2>
+    <ol>
+      <li>On the TV, open the side menu (press Left at the edge of Home) and choose <b>Addons</b>.</li>
+      <li>Move to the <b>New addon</b> tab. It opens by itself when you move onto it, no OK needed.</li>
+      <li>Paste or type the link, then press <b>Add</b>.</li>
+    </ol>
+    <p>Tip: the box accepts the link with or without <code>manifest.json</code> at the end, and the <code>stremio://</code> form.</p>
+    <p><img src="/assets/m7.jpg" alt="The New addon tab in Reddate TV"></p>
+
+    <h2>Step 4 · Check that it worked</h2>
+    <ul>
+      <li><b>Catalog addon:</b> new rows appear on Home. If the banner shows the wrong thing, reorder rows in the <b>Home rows</b> tab.</li>
+      <li><b>Stream addon:</b> open a title and press Play. You'll see stream cards with the addon's logo, quality, language and a green, yellow or red connection check.</li>
+      <li>The addon's card on the Addons screen shows <b>Catalog</b>, <b>Streams</b> or <b>Subtitles</b> so you know what it does.</li>
+    </ul>
+    <p><img src="/assets/m5.jpg" alt="The Addons screen"></p>
+
+    <h2>A good first setup</h2>
+    <ol>
+      <li>One catalog addon, to fill Home with rows. A metadata addon like Cinemeta is a common beginner choice.</li>
+      <li>One stream addon you trust.</li>
+      <li>Optionally a subtitles addon for more languages.</li>
+    </ol>
+    <p>The order of catalog addons matters: the first one that supplies a row sets the big banner. Start with a few, not twenty.</p>
+
+    <h2>When something goes wrong</h2>
+    <h3>"Couldn't load" on the addon card</h3>
+    <p>The link is wrong, the addon is down, or it needs HTTPS. Open the link in a browser; you should see text starting with a curly bracket.</p>
+    <h3>Home is empty</h3>
+    <p>You have no enabled catalog addon. Add one, or turn an existing one on.</p>
+    <h3>Pressing Play shows no streams</h3>
+    <p>You have no stream addon, or it doesn't have that title. Try a popular title first, and check the addon's page for any account it needs.</p>
+    <h3>Streams are red</h3>
+    <p>They are slow right now on your connection. Pick a green one, or choose a lower quality.</p>
+    <h3>Remove or pause an addon</h3>
+    <p>On the Addons screen, switch it Off to pause it, or Remove to delete it. Built-in ones can be switched off too.</p>
+
+    <div class="callout"><b>Feeling stuck?</b> The <a href="/features">Features page</a> lists everything the app can do, and the <a href="/#downloader">install steps</a> are on the home page.</div>
+  </div>
+</div>
+</main>
+<footer><div class="wrap"><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="mailto:support@reddate.xyz">support@reddate.xyz</a> · Reddate TV · early test build · Reddate does not host or provide any video. Posters and artwork in the demos belong to their owners. This product uses the TMDB API but is not endorsed or certified by TMDB. Streaming-availability data is provided by JustWatch.</div></footer>
+<script>
+fetch('/support-config').then(function (r) { return r.json(); }).then(function (d) {
+  if (!d || !d.url) return;
+  var nav = document.querySelector('.bar nav'); if (!nav) return;
+  var a = document.createElement('a');
+  a.className = 'coffee'; a.href = d.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+  a.setAttribute('aria-label', 'Buy me a coffee');
+  a.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V9z"/><path d="M17 11h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M8 3v2M12 3v2"/></svg><span>Buy me a coffee</span>';
+  nav.insertBefore(a, nav.querySelector('.pill'));
+}).catch(function () {});
+</script>
+<script src="/assets/nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin
+Disallow: /stats
+Disallow: /join/
+Sitemap: https://tv.reddate.xyz/sitemap.xml

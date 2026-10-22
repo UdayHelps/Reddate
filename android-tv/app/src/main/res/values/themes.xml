@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">false</item>
+        <!-- The player's own views (controls, chat, panels) use the same text face as the rest of the app. -->
+        <item name="android:fontFamily">@font/hanken</item>
+    </style>
+    <!-- The player sits over Home as a see-through window (its own views paint it black), so Android keeps the page
+         behind it running: an opaque player made Android freeze that page, and with it the party connection. -->
+    <style name="PlayerTheme" parent="AppTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+</resources>

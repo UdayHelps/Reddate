@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Set up Reddate TV</title>
+<meta name="description" content="Set up Reddate TV in a few steps: account, profiles, addons.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Hanken+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/landing.css?v=10">
+<style>
+  .hello{padding:clamp(28px,6vw,64px) 0 8px}
+  .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--paper-2);border-radius:999px;padding:6px 14px;font-weight:700;font-size:.9rem;color:var(--muted)}
+  .pill i{width:9px;height:9px;border-radius:50%;background:var(--good)}
+  .pill.wait i{background:var(--ok)}
+  .checks{margin:22px 0 0;padding:0;list-style:none;background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+  .check{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 16px;border-top:1px solid var(--line)}
+  .check:first-child{border-top:0}
+  .check .dot{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:.9rem;font-family:var(--font-display);background:var(--paper-3);color:var(--muted)}
+  .check.done .dot{background:var(--good);color:#06210f}
+  .check h3{font-size:1.05rem;margin:0}
+  .check p{color:var(--muted);font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .check .btn{padding:8px 14px;font-size:.88rem}
+  .tip{margin:28px 0;border:1px solid var(--line);border-left:4px solid var(--accent);background:var(--paper-2);border-radius:10px;padding:16px 18px;color:var(--muted)}
+  .tip b{color:var(--ink)}
+  .links{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+</style>
+<meta property="og:title" content="Set up Reddate TV">
+<meta property="og:description" content="Set up Reddate TV in a few steps: account, profiles, addons.">
+<meta property="og:image" content="https://tv.reddate.xyz/assets/brag.jpg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tv.reddate.xyz/setup">
+<link rel="canonical" href="https://tv.reddate.xyz/setup">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="icon" href="/icons/icon-192.png" sizes="192x192" type="image/png">
+<meta name="theme-color" content="#141110">
+</head>
+<body>
+<header class="bar"><div class="wrap">
+  <a class="brand" href="/"><img src="/assets/logo.svg" alt="">Reddate <b>TV</b></a>
+  <nav aria-label="Pages"><a href="/features">Features</a><a href="/addons-guide">Add addons</a><a class="pill" href="/#download">Download</a></nav>
+</div></header>
+
+<main class="wrap">
+  <section class="hello">
+    <p class="eyebrow">New to Reddate TV?</p>
+    <h1 style="font-size:clamp(2.2rem,6vw,4rem)" id="title">Set up Reddate</h1>
+    <p class="lede" id="sub" style="max-width:46ch;margin:14px 0 18px"></p>
+    <span class="pill wait" id="tvPill"><i></i><span id="tvPillText">Checking your TV…</span></span>
+  </section>
+
+  <ol class="checks" id="checks">
+    <li class="check" id="c-tv"><span class="dot">1</span><div><h3>TV</h3><p id="c-tv-p">Not connected yet</p></div><a class="btn btn-ghost" href="/app?open=devices" target="_blank" rel="noopener">Add</a></li>
+    <li class="check" id="c-prof"><span class="dot">2</span><div><h3>Profiles</h3><p id="c-prof-p">One per person</p></div><a class="btn btn-ghost" href="/app?open=profiles" target="_blank" rel="noopener">Manage</a></li>
+    <li class="check" id="c-str"><span class="dot">3</span><div><h3>Streams</h3><p id="c-str-p">Needed to play</p></div><a class="btn btn-main" href="/app?open=addons&tab=add" target="_blank" rel="noopener">Add</a></li>
+  </ol>
+
+  <p style="margin:24px 0 60px"><a href="/addons-guide" target="_blank" rel="noopener">Where do I find addon links?</a></p>
+</main>
+<footer><div class="wrap"><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="mailto:support@reddate.xyz">support@reddate.xyz</a> · Reddate TV · early test build · Reddate does not host or provide any video.</div></footer>
+
+<script>
+(function () {
+  const $ = id => document.getElementById(id);
+  const params = new URLSearchParams(location.search);
+  let token = null;
+  try { token = localStorage.getItem('reddate-token'); } catch (e) {}
+  const mark = (id, done, text) => { $(id).classList.toggle('done', done); if (done) $(id).querySelector('.dot').textContent = '✓'; if (text) $(id + '-p').textContent = text; };
+  const tvName = params.get('tv');
+  if (tvName) { $('title').textContent = 'Your TV is connected.'; $('tvPillText').textContent = tvName + ' is connected'; $('tvPill').classList.remove('wait'); mark('c-tv', true, tvName); }
+  if (!token) {
+    $('tvPillText').textContent = 'Sign in to see your setup';
+    $('sub').textContent = 'Sign in first.';
+    const b = document.createElement('a'); b.className = 'btn btn-main'; b.href = '/app?open=account'; b.target = '_blank'; b.rel = 'noopener'; b.textContent = 'Sign in'; b.style.marginTop = '14px'; $('sub').after(b);
+    return;
+  }
+  const H = { Authorization: 'Bearer ' + token };
+  Promise.all([
+    fetch('/api/vault', { headers: H }).then(r => r.ok ? r.json() : null).catch(() => null),
+    fetch('/api/devices', { headers: H }).then(r => r.ok ? r.json() : null).catch(() => null)
+  ]).then(([v, d]) => {
+    if (!v) { $('tvPillText').textContent = 'Please sign in again'; return; }
+    const profiles = (v.vault && v.vault.profiles) || [];
+    const tvs = ((d && d.devices) || []).filter(x => x.kind === 'tv');
+    if (tvs.length) { $('tvPill').classList.remove('wait'); $('tvPillText').textContent = tvs.length === 1 ? tvs[0].name + ' is connected' : tvs.length + ' TVs connected'; mark('c-tv', true, tvs.map(t => t.name).join(', ')); }
+    else if (!tvName) $('tvPillText').textContent = 'No TV connected yet';
+    if (profiles.length) mark('c-prof', profiles.length > 1 || profiles[0].name !== 'Me', profiles.map(p => p.name).join(', '));
+    const urls = profiles.flatMap(p => p.addons || []);
+    // Which of their added addons give Home rows and which give streams (read each manifest in the browser).
+    const check = u => fetch(u, { cache: 'no-store' }).then(r => r.json()).then(m => ({ u, m })).catch(() => null);
+    Promise.all(urls.slice(0, 12).map(check)).then(list => {
+      const ok = list.filter(Boolean);
+      const str = ok.filter(x => (x.m.resources || []).some(r => (typeof r === 'string' ? r : r.name) === 'stream'));
+      if (str.length) mark('c-str', true, str.map(x => x.m.name).slice(0, 3).join(', '));
+      const mainBtn = $('c-str').querySelector('.btn'); if (str.length) { mainBtn.className = 'btn btn-ghost'; mainBtn.textContent = 'Manage'; }
+    });
+    if (!v.verified) { const li = document.createElement('li'); li.className = 'check'; li.innerHTML = '<span class="dot">!</span><div><h3>Email</h3><p>Not confirmed yet</p></div><a class="btn btn-ghost" href="/app?open=account" target="_blank" rel="noopener">Open</a>'; $('checks').appendChild(li); }
+  });
+})();
+</script>
+<script>
+fetch('/support-config').then(function (r) { return r.json(); }).then(function (d) {
+  if (!d || !d.url) return;
+  var nav = document.querySelector('.bar nav'); if (!nav) return;
+  var a = document.createElement('a');
+  a.className = 'coffee'; a.href = d.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+  a.setAttribute('aria-label', 'Buy me a coffee');
+  a.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V9z"/><path d="M17 11h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M8 3v2M12 3v2"/></svg><span>Buy me a coffee</span>';
+  nav.insertBefore(a, nav.querySelector('.pill'));
+}).catch(function () {});
+</script>
+<script src="/assets/nav.js"></script>
+</body>
+</html>

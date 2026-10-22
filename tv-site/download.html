@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reddate TV</title>
+<meta name="description" content="Watch movies and shows together with anyone in the world, in sync, with voice, video and chat. Free for Android TV and Google TV, and in your browser.">
+<link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Hanken+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/dl2.css?v=5">
+<meta property="og:title" content="Reddate TV">
+<meta property="og:description" content="Watch together with anyone, anywhere. In sync, with voice, video and chat.">
+<meta property="og:image" content="https://tv.reddate.xyz/assets/brag.jpg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tv.reddate.xyz/download">
+<link rel="canonical" href="https://tv.reddate.xyz/download">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta name="theme-color" content="#0d0b0a">
+<script>if (/^#room=/.test(location.hash)) location.replace('/app' + location.hash); document.documentElement.classList.add('js');</script>
+<style>
+/* story + lounge demo + addons */
+.why{padding:clamp(80px,10vw,150px) var(--m) 0}
+.why h2{max-width:16ch}
+.big{margin-top:24px;max-width:36ch;font:500 clamp(22px,2.4vw,30px)/1.3 var(--text)}
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(24px,4vw,64px);margin-top:clamp(40px,5vw,72px)}
+.three p{margin-top:12px;color:var(--muted);max-width:38ch}
+.lounge{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(32px,6vw,96px);align-items:center;padding:clamp(96px,12vw,180px) var(--m) 0}
+.lounge .lead p{margin-top:24px;max-width:44ch}
+.lounge .mini{margin-top:24px;list-style:none;display:grid;gap:12px;color:var(--muted);max-width:44ch}
+.lounge .mini li{padding-left:22px;position:relative}
+.lounge .mini li::before{content:"";position:absolute;left:0;top:.6em;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.demo{background:var(--raise);border-radius:18px;padding:clamp(18px,2.4vw,32px);display:grid;gap:18px}
+.demo .room small{display:block;color:var(--muted);font-size:var(--t-s)}
+.demo .room b{display:block;font:800 clamp(34px,4.4vw,60px)/.95 var(--display);letter-spacing:-.04em;margin-top:4px}
+.demo .room span{display:block;margin-top:6px;color:var(--muted)}
+.demo .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.demo .tiles i{position:relative;aspect-ratio:4/3;border-radius:14px;background:var(--raise-2);display:grid;place-items:center;font-style:normal}
+.demo .tiles i.t2{background:#2f2926}.demo .tiles i.t3{background:#342b27}
+.demo .tiles u{text-decoration:none;display:grid;place-items:center;width:3.2rem;height:3.2rem;border-radius:50%;background:var(--accent);color:var(--accent-ink);font:800 1.3rem var(--display)}
+.demo .tiles em{position:absolute;left:10px;bottom:8px;font-style:normal;font-size:.85rem;color:var(--ink)}
+.demo .chat{display:grid;gap:8px}
+.demo .chat p{margin:0;padding:10px 14px;border-radius:18px 18px 18px 6px;background:var(--raise-2);max-width:88%;font-size:.95rem}
+.demo .chat p b{display:block;font-size:.8rem;color:#ffb08f;margin-bottom:2px}
+.demo .chat p.out{justify-self:end;background:var(--accent);color:var(--accent-ink);border-radius:18px 18px 6px 18px;font-weight:600}
+.addons{padding:clamp(96px,12vw,180px) var(--m) 0}
+.addons h2{max-width:18ch}
+.what{margin-top:32px;background:var(--raise);max-width:900px}
+.what summary{list-style:none;cursor:pointer;display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:26px 30px;font:700 clamp(22px,2.4vw,30px)/1.15 var(--display);letter-spacing:-.01em}
+.what summary::-webkit-details-marker{display:none}
+.what summary span{font:500 15px var(--display);color:var(--accent);letter-spacing:0}
+.what summary::after{content:"+";margin-left:auto;color:var(--accent);font-size:1.8rem;line-height:1;transition:transform .2s}
+.what[open] summary::after{transform:rotate(45deg)}
+.eli5{padding:0 30px 30px;display:grid;gap:14px;max-width:62ch}
+.eli5 p{font-size:20px;line-height:1.45}
+.get{margin-top:clamp(32px,4vw,56px)}
+.get ol{list-style:none;margin-top:20px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,3vw,48px)}
+.get li b{display:block;font:700 var(--t-m)/1.15 var(--display)}
+.get li span{display:block;margin-top:8px;color:var(--muted);max-width:36ch}
+.get li a{color:var(--accent);font-weight:700}
+@media (max-width:900px){.three,.lounge,.get ol{grid-template-columns:1fr}}
+</style>
+<style>
+/* the live demo: one clock, two screens */
+.live{position:relative;margin-top:clamp(32px,4vw,56px);background:var(--raise);border-radius:4px;overflow:hidden;max-width:960px;aspect-ratio:16/9;display:grid}
+.f-sync .pair2{display:grid;grid-template-columns:1fr 1fr;gap:2px;align-self:stretch}
+.f-sync .scr{position:relative;overflow:hidden}
+.f-sync .scr img{width:100%;height:100%;object-fit:cover;transition:filter .3s}
+.f-sync.paused .scr img{filter:brightness(.55)}
+.f-sync .city{position:absolute;left:10px;top:8px;font-size:14px;font-weight:700}
+.f-sync .tc{position:absolute;right:10px;top:6px;font:700 22px var(--display);font-variant-numeric:tabular-nums}
+.f-sync .ctl{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;gap:12px;padding:10px;background:rgba(13,11,10,.72)}
+.f-sync .ctl button{border:0;border-radius:999px;min-height:36px;padding:0 16px;background:var(--accent);color:var(--accent-ink);font:700 14px var(--text);cursor:pointer}
+.f-sync .ctl span{font-size:14px;color:var(--ink)}
+/* footer: the name, cropped */
+footer .crop{font:800 26vw/.8 var(--display);letter-spacing:-.05em;white-space:nowrap;overflow:hidden;height:19vw;padding-top:.02em;margin:0 calc(var(--m)*-1);padding-left:var(--m);color:var(--raise-2);user-select:none}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="brand" href="/download"><img src="/assets/logo.svg" alt="">Reddate TV</a>
+  <nav id="nav" aria-label="Pages">
+    <a class="hide-s" href="/app">Web version</a>
+    <a href="/addon-list">Addons</a>
+    <a class="btn" href="#install">Download</a>
+  </nav>
+</header>
+
+<main>
+<section class="hero">
+  <div class="bg"><video src="https://udayhelps.github.io/Reddate/media/hero-home.mp4?v=3" poster="/assets/hero-home.jpg?v=3" autoplay muted loop playsinline preload="auto" aria-label="Browsing Reddate Home on a TV with the remote: Trending movies and Top 10 movies today"></video></div>
+  <div class="copy">
+    <h1>Watch together.</h1>
+    <p class="lede">Wherever you are. Press play once and everyone you invite, in the next room or another country, watches the same second. Talk, see each other and chat while it plays.</p>
+    <div class="cta">
+      <a class="btn" href="#install">Download for Android TV</a>
+      <a class="btn quiet" href="/join">Join a party with a code</a>
+    </div>
+    <p class="fine">Free early build for Android TV and Google TV · <span data-ver>Version 0.4.3</span></p>
+  </div>
+</section>
+
+<section class="why" id="why">
+  <h2 data-rv>Movie night, without the same room.</h2>
+  <p class="big" data-rv style="--d:1">Reddate puts everyone on the same second of the same video, wherever they are, and lets you laugh, argue and react while it plays.</p>
+    <figure class="fr f-sync live" data-ui aria-label="Two screens, Pune and Toronto, on the same second. Pausing one pauses both.">
+    <div class="pair2">
+      <div class="scr"><img src="/assets/hero-home.jpg?v=3" alt="" width="640" height="360" loading="lazy"><span class="city">Pune</span><span class="tc" data-tc>0:00</span></div>
+      <div class="scr"><img src="/assets/hero-home.jpg?v=3" alt="" width="640" height="360" loading="lazy"><span class="city">Toronto</span><span class="tc" data-tc>0:00</span></div>
+    </div>
+    <div class="ctl"><button type="button" id="syncBtn">Pause for both</button><span id="syncSay">Same second, everywhere</span></div>
+  </figure>
+  <div class="three">
+    <div data-rv><h3>Everyone on the same second</h3><p>Play, pause and skip stay in sync on every screen. Invite your own TVs with one press, and anyone else joins with a short code, from a TV, phone, tablet or computer. There is no limit on how many.</p></div>
+    <div data-rv style="--d:1"><h3>Talk and see each other</h3><p>The Lounge gives the party voice and video in real time, plus chat and reactions. Your TV shows the chat and every reaction on screen.</p></div>
+    <div data-rv style="--d:2"><h3>You bring the videos</h3><p>Reddate hosts no video files. You add addons, small helpers that find streams for you, and Reddate plays them in sync.</p></div>
+  </div>
+</section>
+
+<section class="top10" id="top10" hidden>
+  <div class="t10-head">
+    <h2>Top 10 tonight</h2>
+    <p class="muted">Live from the free Reddate Catalog addon, the same row your TV shows on Home.</p>
+  </div>
+  <ol class="t10-row" id="t10Row" data-ui></ol>
+</section>
+
+<section class="feature" id="together">
+  <div class="head">
+    <h2 data-rv>Start a party in one press</h2>
+    <p data-rv style="--d:1">Pick a title and choose Watch together. Press Invite all my profiles and every TV on your account gets a pop-up: Join or Not now. Friends anywhere in the world join with a short code or link, from a TV, phone, tablet or computer. Everyone stays on the same second.</p>
+  </div>
+  <div class="party" id="party" data-ui role="img" aria-label="Two TVs: the living room TV sends an invite, the bedroom TV shows Join or Not now, then both play the same scene with chat on screen">
+    <figure class="tv">
+      <div class="screen">
+        <img class="home" src="/assets/p-top10.jpg" alt="" loading="lazy">
+        <div class="l-invite"><b>Invite</b><span class="opt on">Invite all my profiles</span><span class="opt">One profile</span><span class="opt">Another TV</span></div>
+        <div class="l-toast">Invite sent to 2 TVs</div>
+        <div class="l-play"><img src="/assets/p-skip.jpg" alt="" loading="lazy"><span class="who">3 watching · Room DESE-QVJA</span><span class="bar"><i></i></span><span class="c1"><b>Priya</b>Bro please play Stranger Things next</span></div>
+      </div>
+      <figcaption>Living room · Priya</figcaption>
+    </figure>
+    <figure class="tv">
+      <div class="screen">
+        <img class="home" src="/assets/p-top10.jpg" alt="" loading="lazy">
+        <div class="r-pop"><small>Watch party</small><b>Priya invites you to watch together</b><span class="q">"Movie night" from Living room TV</span><span class="btns"><span class="join">Join</span><span class="no">Not now</span></span></div>
+        <div class="l-play"><img src="/assets/p-skip.jpg" alt="" loading="lazy"><span class="who">3 watching · Room DESE-QVJA</span><span class="bar"><i></i></span><span class="c1"><b>Priya</b>Bro please play Stranger Things next</span><span class="c2"><b>Me</b>PLEASE NO</span></div>
+      </div>
+      <figcaption>Bedroom · you</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="lounge" id="lounge">
+  <div class="lead">
+    <h2 data-rv>Talk while it plays.</h2>
+    <p data-rv style="--d:1">Open the Lounge on a phone or computer and the whole party is there: voice and video in real time, chat, emoji and floating reactions, pinned messages and who has seen what. The TV shows the chat and fills the screen with every reaction.</p>
+    <ul class="mini" data-rv style="--d:2">
+      <li>Join voice and video with one button, or just chat.</li>
+      <li>Hosts can mute everyone, lock the room or remove someone.</li>
+      <li>Calls go straight between people and are encrypted. Up to 8 on a call.</li>
+    </ul>
+  </div>
+  <div class="demo" data-ui data-rv style="--d:1" role="img" aria-label="The Reddate Lounge: a room code, who is here, a call with video tiles and the chat">
+    <div class="room"><small>You are in room</small><b>DESE-QVJA</b><span>3 here</span></div>
+    <div class="tiles"><i class="t1"><u>P</u><em>Priya</em></i><i class="t2"><u>S</u><em>Sam</em></i><i class="t3"><u>M</u><em>Me</em></i></div>
+    <div class="chat">
+      <p class="in"><b>Priya</b>Which country is everyone watching from? I am in Pune</p>
+      <p class="in"><b>Sam</b>Toronto. It is 9 am and I regret nothing</p>
+      <p class="out">Pressing play in 3, 2, 1</p>
+    </div>
+  </div>
+</section>
+
+<section class="pair">
+  <figure data-rv>
+    <div class="shot"><img src="/assets/p-skip.jpg" alt="A preview picture at 1:15 above the progress bar while skipping" width="1280" height="720" loading="lazy"></div>
+    <h3>Skip with a preview</h3>
+    <p>Fast-forward and a picture of that moment appears above the bar.</p>
+  </figure>
+  <figure data-rv style="--d:2">
+    <div class="shot"><img src="/assets/p-streams.jpg" alt="The stream picker for Animals, with speed, 1080p, Atmos, language flags and device checks" width="1280" height="720" loading="lazy"></div>
+    <h3>Know before you press</h3>
+    <p>Speed, picture and sound formats and language on every stream, quickest first.</p>
+  </figure>
+</section>
+
+<section class="addons" id="addons">
+  <h2 data-rv>Reddate doesn't host any video.</h2>
+  <p class="big" data-rv style="--d:1">You bring the sources, with addons. Reddate finds, chooses and plays them for everyone in sync.</p>
+  <details class="what" data-rv style="--d:2">
+    <summary>What's an addon? <span>Tap to find out</span></summary>
+    <div class="eli5">
+      <p>Think of Reddate as an empty TV. It has the screen and the sound, but no channels.</p>
+      <p>An addon is like a channel pack you plug in. Each one is a tiny helper that knows where to look: one for trending movies, one for YouTube, one for subtitles.</p>
+      <p>You choose which helpers to plug in. Reddate asks them what they found, shows it on your Home, and plays it when you press Play. Take a helper out and its things disappear. Reddate never stores or hosts the videos.</p>
+    </div>
+  </details>
+  <div class="get" data-rv style="--d:2">
+    <h3>How to get your first addon</h3>
+    <ol>
+      <li><b>Reddate Catalog</b><span>Trending and Top 10 rows. Free: open Addons on your TV and switch it on.</span></li>
+      <li><b>Reddate YT</b><span>YouTube on your Home, set up in two steps. <a class="link" href="/addon-list">Install Reddate YT</a></span></li>
+      <li><b>Any other addon</b><span>Any Stremio or Nuvio addon works: copy its link ending in manifest.json and paste it in Addons. <a class="link" href="/addons-guide">Step by step</a></span></li>
+    </ol>
+  </div>
+</section>
+
+<section class="film" aria-label="Reddate TV in 25 seconds">
+  <h2 data-rv>See it in 25 seconds</h2>
+  <video src="https://udayhelps.github.io/Reddate/media/brag.mp4" poster="/assets/brag.jpg" autoplay muted loop playsinline controls preload="metadata" aria-label="Reddate TV promo: invites, streams and Top 10"></video>
+</section>
+
+<section class="more">
+  <h2 data-rv>The little things</h2>
+  <ul>
+    <li data-rv><b>Continue watching</b><span>Resumes at the same second, on the same provider. Up next starts the following episode.</span></li>
+    <li data-rv style="--d:1"><b>A Home for everyone</b><span>Each profile gets its own rows, addons, subtitles and Continue watching.</span></li>
+    <li data-rv style="--d:2"><b>Subtitles your way</b><span>Any language, with delay, size, colour and position.</span></li>
+    <li data-rv style="--d:3"><b>Same stream as last time</b><span>Pick a stream once and the next episode starts the same kind, marked as your usual.</span></li>
+  </ul>
+</section>
+
+<section class="install" id="install">
+  <div class="lead">
+    <h2 data-rv>Get Reddate TV</h2>
+    <p data-rv style="--d:1">An early build, not on the Play Store. <span data-ver>Version 0.4.3</span> · <span data-size>3.1 MB</span> · signed with Reddate's release key.</p>
+    <div class="cta" data-rv style="--d:2"><a class="btn" href="/get" download>Download the APK</a><a class="btn quiet" href="/addons-guide">New to addons?</a></div>
+    <p class="hash">SHA-256 <span data-hash>060a260ca44314d1d5b26788c1c923532241be4cf8f17f9a8297d6332442cf43</span></p>
+  </div>
+  <ol class="steps">
+    <li data-rv><div><b>Install Downloader</b><span>A free app from your TV's store.</span></div></li>
+    <li data-rv style="--d:1"><div><b>Enter tv.reddate.xyz/get</b><span>Press Go, then Install.</span></div></li>
+    <li data-rv style="--d:2"><div><b>Scan the code</b><span>Sign in on your phone. Setup takes about five minutes in all.</span></div></li>
+  </ol>
+</section>
+
+<section class="faq" id="questions">
+  <h2 data-rv>Questions</h2>
+  <div>
+    <details name="q" open><summary>What do I need?</summary><p>An Android TV or Google TV, and a free Reddate account you sign in to from your phone.</p></details>
+    <details name="q"><summary>Does Reddate provide movies and shows?</summary><p>No. Reddate hosts no video. You add addons, small helpers that find streams, and Reddate helps you find, choose and watch together.</p></details>
+    <details name="q"><summary>Can I watch with friends in another country?</summary><p>Yes. Everyone joins the same party with a short code or link and stays on the same second, wherever they are.</p></details>
+    <details name="q"><summary>How do voice and video work?</summary><p>Open the Lounge on a phone or computer and press Voice/Video. Calls go straight between people and are encrypted, for up to 8 people at once. The TV joins the chat and shows reactions.</p></details>
+    <details name="q"><summary>Is it on the Play Store?</summary><p>No, it's an early test build. Install the APK with Downloader. It is signed with Reddate's release key, and the SHA-256 above lets you check the file.</p></details>
+    <details name="q"><summary>How many people can join a party?</summary><p>There is no limit. Profiles on your account join with one press; anyone else uses the party code or link.</p></details>
+    <details name="q"><summary>Does my phone app change?</summary><p>No. This page is about the TV app. The Reddate you already use on phone and computer stays as it is.</p></details>
+    <details name="q"><summary>Can I watch in a browser?</summary><p>Yes: open tv.reddate.xyz/app on a phone or computer. Some files (MKV, HEVC, DTS sound) play on the TV only.</p></details>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="close">
+    <h2 data-rv>Press play together.</h2>
+    <a class="btn" href="#install">Download for Android TV</a>
+  </div>
+  <div class="meta">
+    <div><a class="link" href="/privacy">Privacy</a><a class="link" href="/terms">Terms</a><a class="link" href="mailto:support@reddate.xyz">support@reddate.xyz</a></div>
+    <div>Posters and artwork in the demos belong to their owners. This product uses the TMDB API but is not endorsed or certified by TMDB. Streaming-availability data is provided by JustWatch.</div>
+    <div>Reddate TV · 2026</div>
+  </div>
+  <div class="crop" aria-hidden="true">Reddate</div>
+</footer>
+<div class="dock" id="dock" aria-hidden="true">
+  <img src="/assets/logo.svg" alt=""><span><b>Reddate TV</b> <span class="muted">Free for Android TV and Google TV</span></span>
+  <a class="btn" href="#install" tabindex="-1">Download</a>
+</div>
+<script>
+(function(){
+  // The live thing: one clock, two screens. Pause one and both pause.
+  var box=document.querySelector('.f-sync'); if(!box) return;
+  var t=0,playing=true,tcs=[].slice.call(box.querySelectorAll('[data-tc]')),btn=document.getElementById('syncBtn'),say=document.getElementById('syncSay');
+  function fmt(x){var m=Math.floor(x/60),s=Math.floor(x%60);return m+':'+(s<10?'0':'')+s}
+  function draw(){tcs.forEach(function(n){n.textContent=fmt(t)})}
+  if(!matchMedia('(prefers-reduced-motion:reduce)').matches) setInterval(function(){ if(playing){t+=1;draw()} },1000);
+  btn.addEventListener('click',function(){playing=!playing;box.classList.toggle('paused',!playing);btn.textContent=playing?'Pause for both':'Play for both';say.textContent=playing?'Same second, everywhere':'Both paused at '+fmt(t)});
+  draw();
+})();
+</script>
+<script src="/assets/dl2.js?v=3"></script>
+</body>
+</html>

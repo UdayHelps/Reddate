@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Features · Reddate TV</title>
+<meta name="description" content="Everything Reddate TV does.">
+<link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Hanken+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/landing.css?v=10">
+<meta property="og:title" content="Features · Reddate TV">
+<meta property="og:description" content="Everything Reddate TV does.">
+<meta property="og:image" content="https://tv.reddate.xyz/assets/brag.jpg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tv.reddate.xyz/features">
+<link rel="canonical" href="https://tv.reddate.xyz/features">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="icon" href="/icons/icon-192.png" sizes="192x192" type="image/png">
+<meta name="theme-color" content="#141110">
+</head>
+<body>
+<header class="bar"><div class="wrap">
+  <a class="brand" href="/"><img src="/assets/logo.svg" alt="">Reddate <b>TV</b></a>
+  <nav aria-label="Pages">
+    <a href="/features">Features</a>
+    <a href="/addons-guide">Add addons</a>
+    <a href="/join">Join a party</a>
+    <a class="pill" href="/#download">Download</a>
+  </nav>
+</div></header>
+<main>
+<div class="wrap page">
+  <p class="eyebrow">Features</p>
+  <h1>Everything Reddate TV does.</h1>
+  <p class="lede">The big things first, then the details.</p>
+  <div class="toc"><a class="btn btn-ghost" href="#together">Watch together</a><a class="btn btn-ghost" href="#choose">Choosing a stream</a><a class="btn btn-ghost" href="#home">Home</a><a class="btn btn-ghost" href="#player">Player</a></div>
+<section class="group" id="together"><h2>Watch together</h2><p class="sub">Same scene, same second, on every screen.</p><ul class="rows"><li><b>Invite a profile, or all of them</b><span>Pick one profile on your account, another TV, or everyone at once. They get Join or Not now, wherever they are in the app.</span></li><li><b>Join with a code or a QR</b><span>Friends outside your account scan the QR or open the link, sign in, pick a profile and they are in. No limit on how many.</span></li><li><b>The host decides</b><span>Seeking and picking what plays stay with the host. Guests can pause and play for everyone, and the host can switch that off.</span></li><li><b>Chat from the couch</b><span>Reply with the TV keyboard, hide it when you want a clean picture, and see who is in the room.</span></li><li><b>Gentle on slow connections</b><span>A screen that falls behind catches up smoothly, and a dropped TV rejoins on its own.</span></li></ul></section>
+<section class="group" id="choose"><h2>Choosing a stream</h2><p class="sub">So you never pick blind.</p><ul class="rows"><li><b>Speed you can see</b><span>Each stream is tested on your own connection, with the response time and speed shown. The best come first.</span></li><li><b>Formats at a glance</b><span>4K, HDR, Dolby Vision and Atmos, DTS, channels and source, as small badges.</span></li><li><b>Languages and devices</b><span>Flags for every language in the release, and icons for whether it should play on this TV, a phone or a computer.</span></li><li><b>Your usual</b><span>Reddate remembers the kind of stream you picked for a show and uses it for the next episode, and for resume.</span></li><li><b>Never a black screen</b><span>Streams your TV cannot decode are hidden or ranked last.</span></li></ul></section>
+<section class="group" id="home"><h2>Home</h2><p class="sub">Made for the remote.</p><ul class="rows"><li><b>Top 10</b><span>Today's most-watched movies and series, and the leaders on each streaming service, as big ranked numbers.</span></li><li><b>Continue watching</b><span>Pick up at the same second with the same provider. Hold OK to remove one. The next episode starts by itself.</span></li><li><b>Your addons, your rows</b><span>Add catalog addons for more rows and reorder or hide any of them. Each addon shows its own logo.</span></li><li><b>Profiles</b><span>Everyone gets their own Home, addons and history, with a quick switch in the side menu.</span></li><li><b>Search</b><span>Series and movies in their own rows, so a show is never buried under its films.</span></li></ul></section>
+<section class="group" id="player"><h2>Player</h2><p class="sub">Everything a TV player should do.</p><ul class="rows"><li><b>Skip with a preview</b><span>Fast-forward and a picture of that moment appears above the bar.</span></li><li><b>Subtitles your way</b><span>Pick from many online options without a restart. Adjust delay, size, colour, background, font and position.</span></li><li><b>Audio</b><span>Starts in English or your language, with flags, and you can change it any time.</span></li><li><b>Episodes</b><span>Switch episode without leaving the picture.</span></li><li><b>Updates</b><span>New versions install from the side menu.</span></li></ul></section>
+</div>
+</main>
+<footer><div class="wrap"><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="mailto:support@reddate.xyz">support@reddate.xyz</a> · Reddate TV · early test build · Reddate does not host or provide any video. Posters and artwork in the demos belong to their owners. This product uses the TMDB API but is not endorsed or certified by TMDB. Streaming-availability data is provided by JustWatch.</div></footer>
+<script>
+fetch('/support-config').then(function (r) { return r.json(); }).then(function (d) {
+  if (!d || !d.url) return;
+  var nav = document.querySelector('.bar nav'); if (!nav) return;
+  var a = document.createElement('a');
+  a.className = 'coffee'; a.href = d.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+  a.setAttribute('aria-label', 'Buy me a coffee');
+  a.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V9z"/><path d="M17 11h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M8 3v2M12 3v2"/></svg><span>Buy me a coffee</span>';
+  nav.insertBefore(a, nav.querySelector('.pill'));
+}).catch(function () {});
+</script>
+<script src="/assets/nav.js"></script>
+</body>
+</html>

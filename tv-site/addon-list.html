@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reddate YT · YouTube for Reddate</title>
+<meta name="description" content="Reddate YT brings YouTube to Reddate on your TV: trending, music, gaming, news, search and channels. Free. Install it in two steps with your own YouTube key.">
+<link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
+<link rel="canonical" href="https://tv.reddate.xyz/addon-list">
+<meta property="og:title" content="Reddate YT · YouTube for Reddate">
+<meta property="og:description" content="Trending, music, gaming, news, search and channels on your TV. Free.">
+<meta property="og:image" content="https://tv.reddate.xyz/assets/brag.jpg">
+<meta name="theme-color" content="#0d0b0a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Hanken+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/dl2.css?v=5">
+<style>
+/* Reddate YT page: the same dark screening room as /download */
+.top{position:relative;inset:auto}
+.try-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 18px;padding:12px var(--m);background:var(--raise);font-size:var(--t-s);text-align:center}
+.try-bar a{font-weight:700;color:var(--accent);text-decoration:none}
+.try-bar a:hover{text-decoration:underline}
+
+.yh{position:relative;overflow:hidden;padding:clamp(56px,8vw,120px) var(--m) clamp(64px,8vw,120px);display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(32px,5vw,88px);align-items:center}
+.yh::before{content:"";position:absolute;inset:0;z-index:0;background:radial-gradient(60% 70% at 85% 30%,rgba(255,106,50,.20),transparent 70%)}
+.yh>*{position:relative;z-index:1}
+.yh .who{display:flex;align-items:center;gap:14px;margin-bottom:28px}
+.yh .who img{width:56px;height:56px;border-radius:14px}
+.yh .who b{display:block;font:700 1.15rem var(--display);letter-spacing:-.01em}
+.yh .who span{color:var(--muted);font-size:var(--t-s)}
+.yh h1{font-size:clamp(44px,7vw,112px)}
+.yh .lede{margin-top:26px;max-width:34ch;font-size:var(--t-m);line-height:1.35}
+.yh .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
+.yh .fine{margin-top:18px;color:var(--muted);font-size:var(--t-s)}
+.yh .look{border-radius:14px;overflow:hidden;background:var(--raise);box-shadow:0 30px 80px rgba(0,0,0,.55)}
+.yh .look img{width:100%;aspect-ratio:16/10;object-fit:cover}
+.yh .look figcaption{padding:14px 18px;color:var(--muted);font-size:var(--t-s)}
+figure{margin:0}
+
+.sec{padding:clamp(80px,10vw,150px) var(--m) 0}
+.sec>h2{max-width:18ch}
+.sec>.sub{margin-top:18px;max-width:52ch;color:var(--muted);font-size:var(--t-m);line-height:1.35}
+
+.feats{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:36px 48px;margin-top:48px}
+.feats b{display:block;font:700 var(--t-m)/1.15 var(--display);letter-spacing:-.01em}
+.feats span{display:block;margin-top:8px;color:var(--muted);max-width:34ch}
+
+.guide{display:grid;gap:clamp(48px,6vw,96px);margin-top:56px}
+.gs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:clamp(24px,4vw,72px);align-items:center}
+.gs:nth-child(even) .gtext{order:2}
+.gs .n{font:800 clamp(56px,7vw,104px)/.85 var(--display);color:var(--accent);letter-spacing:-.04em}
+.gs h3{margin-top:14px}
+.gs p{margin-top:12px;color:var(--muted);max-width:42ch}
+.gs p b{color:var(--ink)}
+.gs .go{margin-top:22px}
+.gs .shot{border-radius:12px;overflow:hidden;background:#000}
+.gs .shot video{width:100%;height:auto;aspect-ratio:1200/736;object-fit:contain;background:#000}
+.gs .shot.empty{background:var(--raise);aspect-ratio:1200/736;display:grid;place-items:center;padding:28px;text-align:center}
+.gs .shot.empty div{font:700 clamp(22px,2.6vw,34px)/1.2 var(--display);letter-spacing:-.02em}
+.gs .shot.empty small{display:block;margin-top:10px;font:400 var(--t-s) var(--text);color:var(--muted)}
+.copyhint{font-family:ui-monospace,Menlo,monospace;background:#0d0b0a;border-radius:8px;padding:2px 8px;font-size:.92em;color:var(--ink)}
+
+.make{margin-top:clamp(80px,10vw,150px);background:var(--raise);padding:clamp(56px,7vw,110px) var(--m);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(32px,5vw,96px);align-items:start}
+.make .lead p{margin-top:20px;color:var(--muted);max-width:40ch}
+.make .safe{margin-top:26px;display:grid;gap:10px;color:var(--muted);font-size:var(--t-s);max-width:42ch}
+.make .safe div{display:grid;grid-template-columns:18px 1fr;gap:10px}
+.make .safe div::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:.55em}
+.card{background:var(--raise-2);border-radius:16px;padding:clamp(22px,3vw,40px)}
+.card label.l{display:block;font-weight:700;margin:0 0 8px}
+.card input[type=text],.card select{width:100%;background:var(--ground);color:var(--ink);border:2px solid transparent;border-radius:12px;padding:15px 16px;font:500 1rem var(--text)}
+.card input[type=text]:focus,.card select:focus{outline:0;border-color:var(--accent)}
+.card input[aria-invalid=true]{border-color:#ff8a70}
+.card .gap{height:18px}
+.say{min-height:1.5em;margin:8px 0 0;font-size:var(--t-s)}
+.say.bad{color:#ff8a70}.say.good{color:#7ddc9a}
+.card .acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.btn2{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 24px;border:0;border-radius:999px;background:#322a26;color:var(--ink);font:700 1rem var(--text);cursor:pointer;text-decoration:none;transition:transform .18s var(--ease),background .18s}
+.btn2:hover{transform:translateY(-2px);background:#40362f}
+.btn2.main{background:var(--accent);color:var(--accent-ink)}
+.btn2.main:hover{background:#ff7d4b}
+.btn2[disabled]{opacity:.6;cursor:default;transform:none}
+.btn2 img{width:22px;height:22px}
+.ticket{display:flex;gap:10px;margin-top:6px}
+.ticket code{flex:1;min-width:0;background:var(--ground);padding:14px 16px;border-radius:12px;font:500 .85rem/1.45 ui-monospace,Menlo,monospace;overflow-wrap:anywhere;color:var(--muted)}
+.card .done h3{font-size:1.5rem;margin-bottom:12px}
+.card .note{color:var(--muted);font-size:var(--t-s);margin-top:14px}
+.next{margin-top:22px;padding:18px 20px;border-radius:12px;background:rgba(255,106,50,.12);display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between}
+.next b{font-family:var(--display)}
+[hidden]{display:none !important}
+
+.app-band{margin:clamp(80px,10vw,150px) var(--m) 0;border-radius:18px;overflow:hidden;position:relative;background:var(--raise);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);align-items:center}
+.app-band .copy{padding:clamp(32px,5vw,80px)}
+.app-band h2{font-size:clamp(34px,4.6vw,68px)}
+.app-band p{margin-top:18px;color:var(--muted);max-width:36ch;font-size:var(--t-m);line-height:1.35}
+.app-band .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.app-band img{width:100%;height:100%;min-height:280px;object-fit:cover}
+
+.yfaq{padding:clamp(80px,10vw,150px) var(--m)}
+.yfaq h2{margin-bottom:36px}
+.yfaq details{background:var(--raise);margin-bottom:10px;max-width:880px}
+.yfaq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:20px;padding:24px 28px;font-weight:700}
+.yfaq summary::-webkit-details-marker{display:none}
+.yfaq summary::after{content:"+";color:var(--accent);font-size:1.5rem;line-height:1;transition:transform .2s}
+.yfaq details[open] summary::after{transform:rotate(45deg)}
+.yfaq details p{padding:0 28px 24px;color:var(--muted);max-width:64ch}
+
+@media (max-width:900px){
+  .yh,.gs,.make,.app-band{grid-template-columns:1fr}
+  .gs:nth-child(even) .gtext{order:0}
+  .feats{grid-template-columns:1fr 1fr}
+  .top nav .hide-s{display:none}
+}
+@media (max-width:560px){
+  .feats{grid-template-columns:1fr}
+  .ticket{flex-direction:column}
+}
+
+/* row choices */
+.card span.l{display:block;font-weight:700;margin:0 0 8px}
+.picks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.picks label{display:flex;align-items:center;gap:10px;background:var(--ground);padding:11px 14px;border-radius:10px;cursor:pointer;font-weight:500}
+.picks input{accent-color:var(--accent);width:18px;height:18px;flex:none}
+@media (max-width:560px){.picks{grid-template-columns:1fr}}
+/* compact pass */
+.yh{display:block;padding:clamp(32px,5vw,72px) var(--m) 0}
+.yh h1{font-size:clamp(40px,6vw,88px)}
+.yh .lede{margin-top:16px}
+.yh .cta{margin-top:24px}
+.sec{padding:clamp(36px,5vw,72px) var(--m) 0}
+.feats{margin-top:0;gap:22px 36px}
+.feats b{font-size:1.15rem}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(16px,3vw,40px);margin-top:28px}
+.two article .shot{border-radius:12px;overflow:hidden;background:#000}
+.two article .shot video{width:100%;height:auto;aspect-ratio:1200/736;object-fit:contain;background:#000}
+.two h3{margin-top:16px;display:flex;align-items:center;gap:12px}
+.two .n{display:inline-grid;place-items:center;width:2.2rem;height:2.2rem;border-radius:50%;background:var(--accent);color:var(--accent-ink);font:800 1.1rem var(--display)}
+.two p{margin-top:8px;color:var(--muted)}
+.two p b{color:var(--ink)}
+.two .btn{margin-top:14px;min-height:46px}
+.make{margin-top:clamp(36px,5vw,72px);padding:clamp(32px,4vw,64px) var(--m)}
+.app-band{margin:clamp(36px,5vw,72px) var(--m) 0;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px;padding:clamp(24px,3vw,40px)}
+.app-band .copy{padding:0;max-width:46ch}
+.app-band h2{font-size:clamp(28px,3.4vw,44px)}
+.app-band p{margin-top:8px;font-size:var(--t-b)}
+.app-band .cta{margin-top:0}
+.yfaq{padding:clamp(36px,5vw,72px) var(--m)}
+.yfaq h2{margin-bottom:20px;font-size:clamp(28px,3.4vw,44px)}
+.yfaq summary{padding:18px 22px}
+.yfaq details p{padding:0 22px 18px}
+@media (max-width:760px){.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="brand" href="/download"><img src="/assets/logo.svg" alt="">Reddate TV</a>
+  <nav id="nav" aria-label="Pages">
+    <a class="hide-s" href="/app">Web version</a>
+    <a class="btn" href="/download">Get the app</a>
+  </nav>
+</header>
+
+<div class="try-bar">New to Reddate? <a href="/download">Try the app first, it's free →</a></div>
+
+<main>
+<section class="yh">
+  <div>
+    <div class="who"><img src="/assets/yt-logo.png" alt="" width="56" height="56"><div><b>Reddate YT</b><span>An addon for Reddate</span></div></div>
+    <h1>YouTube, on the big screen.</h1>
+    <p class="lede">Trending, music, gaming, news, search and channels, as rows on your Reddate Home. Free, two steps.</p>
+    <div class="cta">
+      <a class="btn" href="#guide">Get started</a>
+      <a class="btn quiet" href="/download">Try Reddate</a>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="what">
+  <ul class="feats">
+    <li><b>Trending</b><span>What is popular in your country.</span></li>
+    <li><b>Music, Gaming, News</b><span>A row for each.</span></li>
+    <li><b>Search</b><span>Videos and channels.</span></li>
+    <li><b>Channels like shows</b><span>Uploads as episodes, newest first.</span></li>
+    <li><b>Plays inside Reddate</b><span>In YouTube's own player.</span></li>
+    <li><b>30 countries</b><span>Pick whose trending.</span></li>
+  </ul>
+</section>
+
+<section class="sec" id="guide">
+  <h2>Two steps, then paste</h2>
+  <div class="two">
+    <article>
+      <div class="shot"><video src="https://udayhelps.github.io/Reddate/media/yt-enable.mp4" poster="/assets/yt-enable.jpg" muted loop playsinline controls preload="none" aria-label="Pressing Enable on the YouTube Data API v3 page"></video></div>
+      <h3><span class="n">1</span>Turn on YouTube</h3>
+      <p>The button opens the right Google page. Press <b>Enable</b>.</p>
+      <a class="btn" href="https://console.cloud.google.com/apis/library/youtube.googleapis.com" target="_blank" rel="noopener">Turn on YouTube ↗</a>
+    </article>
+    <article>
+      <div class="shot"><video src="https://udayhelps.github.io/Reddate/media/yt-key.mp4" poster="/assets/yt-key.jpg" muted loop playsinline controls preload="none" aria-label="Creating an API key on the Credentials page"></video></div>
+      <h3><span class="n">2</span>Make a key</h3>
+      <p>The button opens the right page. Press <b>+ Create credentials</b>, then <b>API key</b>, and copy it.</p>
+      <a class="btn" href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener">Make your key ↗</a>
+    </article>
+  </div>
+</section>
+
+<section class="make" id="make">
+  <div class="lead">
+    <h2>Install the addon</h2>
+    <p>Paste your key. Then pick what you want on your Home, and install.</p>
+    <div class="safe">
+      <div>Your key is sealed into your personal link and used only to ask YouTube for the lists you chose.</div>
+      <div>Keep the link to yourself. It works like your key does.</div>
+    </div>
+  </div>
+  <div class="card">
+    <form id="f" novalidate>
+      <label class="l" for="key">YouTube API key</label>
+      <input type="text" id="key" name="key" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="AIza…" aria-describedby="msg">
+      <p id="msg" class="say" role="status" aria-live="polite"></p>
+      <div id="opts" hidden>
+        <div class="gap"></div>
+        <label class="l" for="region">Country for Trending</label>
+        <select id="region" name="region"></select>
+        <div class="gap"></div>
+        <span class="l">Rows on Home</span>
+        <div class="picks" id="homeRows"></div>
+        <div class="gap"></div>
+        <span class="l">Search</span>
+        <div class="picks" id="searchRows"></div>
+        <div class="acts"><button class="btn2 main" id="make-btn" type="submit">Install addon</button></div>
+      </div>
+    </form>
+    <div id="done" class="done" hidden>
+      <h3>Installed. Add it to your app</h3>
+      <div class="ticket"><code id="url"></code><button class="btn2" id="copy" type="button">Copy link</button></div>
+      <div class="acts">
+        <a class="btn2 main" id="toReddate" href="#"><img src="/assets/logo.svg" alt="">Add to Reddate</a>
+        <a class="btn2" id="toStremio" href="#">Add to Stremio</a>
+        <a class="btn2" id="toStremioWeb" href="#" target="_blank" rel="noopener">Stremio on the web</a>
+      </div>
+      <p class="note"><b>Nuvio:</b> copy the link, then open Settings, Addons and paste it.</p>
+      <div class="next"><span><b>Don't have Reddate yet?</b> Get the app to see your YouTube rows.</span><a class="btn2 main" href="/download">Try Reddate</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="app-band">
+  <div class="copy">
+    <h2>Try Reddate.</h2>
+    <p>Watch together on the TV, with the house or friends. Free for Android TV and Google TV, and in your browser.</p>
+  </div>
+  <div class="cta">
+    <a class="btn" href="/download">Download for Android TV</a>
+    <a class="btn quiet" href="/app">Open the web version</a>
+  </div>
+</section>
+
+<section class="yfaq">
+  <h2>Questions</h2>
+  <details><summary>Is it free?</summary><p>Yes. Reddate YT and the YouTube key are both free. YouTube gives every key a free allowance each day.</p></details>
+  <details><summary>Is my key safe?</summary><p>It is encrypted into your personal link and used only to ask YouTube for the lists you chose. Keep the link to yourself, because it works like the key.</p></details>
+  <details><summary>It says YouTube isn't turned on for my key</summary><p>Do step 1 again: press Enable, wait a minute, then press Install addon.</p></details>
+  <details><summary>It says the key isn't valid</summary><p>Copy the whole key again from the Credentials page. It starts with AIza and has no spaces.</p></details>
+</section>
+</main>
+
+<footer>
+  <div class="close">
+    <h2>Tonight's sorted.</h2>
+    <a class="btn" href="/download">Get Reddate</a>
+  </div>
+  <div class="meta">
+    <div><a class="link" href="/privacy">Privacy</a><a class="link" href="/terms">Terms</a><a class="link" href="mailto:support@reddate.xyz">support@reddate.xyz</a></div>
+    <div>YouTube is a trademark of Google LLC. Reddate YT is not affiliated with or endorsed by YouTube or Google. This product uses the TMDB API but is not endorsed or certified by TMDB.</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var REGIONS={US:'United States',IN:'India',GB:'United Kingdom',CA:'Canada',AU:'Australia',DE:'Germany',FR:'France',ES:'Spain',IT:'Italy',BR:'Brazil',MX:'Mexico',JP:'Japan',KR:'South Korea',ID:'Indonesia',PH:'Philippines',PK:'Pakistan',BD:'Bangladesh',AE:'UAE',SA:'Saudi Arabia',NG:'Nigeria',ZA:'South Africa',NL:'Netherlands',SE:'Sweden',TR:'Türkiye',RU:'Russia',PL:'Poland',AR:'Argentina',NZ:'New Zealand',SG:'Singapore',MY:'Malaysia'};
+  var $=function(id){return document.getElementById(id)};
+  var mine=((navigator.language||'').split(/[-_]/)[1]||'').toUpperCase(), start=REGIONS[mine]?mine:'US';
+  var sel=$('region');
+  Object.keys(REGIONS).sort(function(a,b){return REGIONS[a].localeCompare(REGIONS[b])}).forEach(function(c){sel.add(new Option(REGIONS[c],c,false,c===start))});
+
+  function links(m){
+    $('toReddate').href='/addons?add='+encodeURIComponent(m);
+    $('toStremio').href='stremio://'+m.replace(/^https?:\/\//,'');
+    $('toStremioWeb').href='https://web.stremio.com/#/addons?addon='+encodeURIComponent(m);
+  }
+  var copy=$('copy');
+  copy.addEventListener('click',function(){
+    var t=$('url').textContent;
+    navigator.clipboard.writeText(t).then(function(){copy.textContent='Copied';setTimeout(function(){copy.textContent='Copy link'},2000)},function(){
+      var r=document.createRange();r.selectNodeContents($('url'));var s=getSelection();s.removeAllRanges();s.addRange(r);copy.textContent='Press Ctrl+C or ⌘C';
+    });
+  });
+
+  // The server's words point at old page names; say it in this page's words.
+  function plain(m){
+    if(/Turn on YouTube/i.test(m)||/isn.t turned on/i.test(m)) return 'The key is fine, but YouTube is not turned on for it yet. Do step 1 (press Enable), wait a minute, then press Install addon again.';
+    if(/Make your key/i.test(m)||/isn.t valid/i.test(m)) return 'Google says this key is not valid. Copy the whole key again from the Credentials page (step 2).';
+    return m;
+  }
+
+  // The rows come from the addon itself, so this list is always what it can really add.
+  var DEFAULT_ON={yt_trending:1,yt_music:1,yt_gaming:1,yt_news:1,yt_search:1,yt_channels:1};
+  fetch('/yt/api/rows').then(function(r){return r.json()}).then(function(d){
+    (d.rows||[]).forEach(function(r){
+      var l=document.createElement('label'), i=document.createElement('input');
+      i.type='checkbox';i.value=r.id;i.checked=!!DEFAULT_ON[r.id];
+      l.appendChild(i);l.appendChild(document.createTextNode(r.id==='yt_search'?'Videos':r.id==='yt_trending'?'Trending':r.name));
+      $(r.search?'searchRows':'homeRows').appendChild(l);
+    });
+  }).catch(function(){});
+  var key=$('key'),msg=$('msg'),make=$('make-btn');
+  // The choices appear as soon as something that looks like a key is pasted.
+  function looksLikeKey(v){return /^[\w-]{30,60}$/.test(v.trim())}
+  key.addEventListener('input',function(){$('opts').hidden=!looksLikeKey(key.value)});
+  key.addEventListener('paste',function(){setTimeout(function(){$('opts').hidden=!looksLikeKey(key.value)},0)});
+  function say(t,kind){msg.textContent=t;msg.className='say'+(kind?' '+kind:'')}
+  $('f').addEventListener('submit',function(e){
+    e.preventDefault();
+    var k=key.value.trim();
+    if(!k){key.setAttribute('aria-invalid','true');say('Paste your key first.','bad');key.focus();return}
+    if(!document.querySelector('#opts input:checked')){say('Pick at least one row.','bad');return}
+    make.disabled=true;make.textContent='Checking…';say('');
+    fetch('/yt/api/link',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({key:k,region:$('region').value,rows:[].map.call(document.querySelectorAll('#opts input:checked'),function(i){return i.value})})})
+      .then(function(r){return r.json().catch(function(){return {}})})
+      .then(function(d){
+        if(!d.ok){key.setAttribute('aria-invalid','true');say(plain(d.message||'That did not work. Try again.'),'bad');return}
+        key.removeAttribute('aria-invalid');say('Key works.','good');
+        $('done').hidden=false;$('opts').hidden=true;$('url').textContent=d.manifest;links(d.manifest);
+        $('done').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'center'});
+      })
+      .catch(function(){say('Could not reach the server. Check your connection and try again.','bad')})
+      .then(function(){make.disabled=false;make.textContent='Install addon'});
+  });
+
+  // Tutorial clips: play while on screen, pause when away.
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(en){var v=en.target;if(en.isIntersecting){v.preload='auto';v.play().catch(function(){})}else v.pause()})},{threshold:.5});
+    [].forEach.call(document.querySelectorAll('.two video'),function(v){io.observe(v)});
+  }
+  if(location.hash==='#yt'||location.hash==='#make'){setTimeout(function(){key.focus({preventScroll:true})},500)}
+})();
+</script>
+</body>
+</html>

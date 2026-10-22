@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy · Reddate TV</title>
+<meta name="description" content="What Reddate TV keeps about you, where, and how to delete it.">
+<link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Hanken+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/landing.css?v=10">
+<meta property="og:title" content="Privacy · Reddate TV">
+<meta property="og:description" content="What Reddate TV keeps about you, where, and how to delete it.">
+<meta property="og:image" content="https://tv.reddate.xyz/assets/brag.jpg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tv.reddate.xyz/privacy">
+<link rel="canonical" href="https://tv.reddate.xyz/privacy">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="icon" href="/icons/icon-192.png" sizes="192x192" type="image/png">
+<meta name="theme-color" content="#141110">
+</head>
+<body>
+<header class="bar"><div class="wrap">
+  <a class="brand" href="/"><img src="/assets/logo.svg" alt="">Reddate <b>TV</b></a>
+  <nav aria-label="Pages">
+    <a href="/features">Features</a>
+    <a href="/addons-guide">Add addons</a>
+    <a href="/join">Join a party</a>
+    <a class="pill" href="/#download">Download</a>
+  </nav>
+</div></header>
+<main>
+<div class="wrap page">
+  <p class="eyebrow">Privacy</p>
+  <h1>What we keep, and why.</h1>
+  <p class="lede">Short version: your email, your saved profiles and addons, and nothing we sell. Updated 13 October 2026.</p>
+<section class="group" id="keep"><h2>What we keep</h2><p class="sub">Only what makes your account work on every screen.</p><ul class="rows">
+<li><b>Your email</b><span>To sign you in and to send account emails (confirming your address, resetting your password). Never for marketing.</span></li>
+<li><b>Your password, scrambled</b><span>Stored as a one-way hash (scrypt with a random salt). We can't read it.</span></li>
+<li><b>Your profiles and what they save</b><span>Profile names, the addon links you add, Home row choices, Continue watching (titles and where you stopped), and player settings such as subtitle preferences. Stored encrypted.</span></li>
+<li><b>Addon links can contain your own keys</b><span>Some addons put an account key in their link (for example a debrid service). We keep that link only so your devices can use it, encrypted, and never use it ourselves.</span></li>
+<li><b>Your signed-in devices</b><span>A device name (like “Chrome on Android”) and when it was last used, so you can see and remove them.</span></li>
+<li><b>Bug reports you send</b><span>If you use Report a bug, we get your message, the picture if you add one, your email if you give it, and the app version and TV model. It goes to one inbox and isn't shared.</span></li>
+<li><b>App problem reports</b><span>When the TV app crashes or can't show previews, it sends the error, the app version and the TV model (for preview problems, also the name of the server the video came from). No account, title or full link.</span></li>
+<li><b>Anonymous counts</b><span>Totals such as visits, rooms and minutes watched. No IP addresses, names, chats or titles. Daily unique visitors are counted from a scrambled code that changes every day, so nobody can be followed.</span></li>
+</ul></section>
+<section class="group" id="not"><h2>What we don't do</h2><ul class="rows">
+<li><b>No selling or sharing</b><span>Your data isn't sold, rented or shared for advertising.</span></li>
+<li><b>No ads, no trackers</b><span>No advertising or tracking cookies. Your browser keeps a few settings locally (like the last tab you used).</span></li>
+<li><b>We don't host video</b><span>Videos come from the addons you choose, straight to your device. Those addons have their own rules.</span></li>
+<li><b>Party chat isn't stored</b><span>Messages in a watch party exist only while the party is open.</span></li>
+</ul></section>
+<section class="group" id="where"><h2>Where it lives</h2><ul class="rows">
+<li><b>Our server</b><span>Runs on Render.</span></li>
+<li><b>Your account data</b><span>Stored with Upstash (a Redis database service), encrypted at rest.</span></li>
+<li><b>Emails</b><span>Sent through Resend.</span></li>
+<li><b>Movie and show details</b><span>Come from TMDB. We ask TMDB about titles, never about you.</span></li>
+<li><b>Network</b><span>Cloudflare handles our web address.</span></li>
+</ul></section>
+<section class="group" id="why"><h2>Why we may use it</h2><ul class="rows">
+<li><b>To run your account</b><span>Signing you in, saving your profiles and addons, and syncing them between your devices. This is the service you asked for.</span></li>
+<li><b>To keep it working and safe</b><span>Problem reports, anonymous counts and short-lived limits on repeated requests (to stop abuse). These rely on our legitimate interest in a working, secure service.</span></li>
+<li><b>No marketing</b><span>We only email you about your account. If we ever want to send anything else, we'll ask first.</span></li>
+</ul></section>
+<section class="group" id="keepfor"><h2>How long we keep it</h2><ul class="rows">
+<li><b>Your account</b><span>Until you delete it. Deleting removes it at once.</span></li>
+<li><b>Unconfirmed accounts</b><span>Deleted after 30 days.</span></li>
+<li><b>Email links</b><span>Confirmation links last 7 days, password reset links 1 hour.</span></li>
+<li><b>Problem reports</b><span>Kept in our server logs for a short time, not tied to an account.</span></li>
+<li><b>Anonymous counts</b><span>About 13 months.</span></li>
+</ul></section>
+<section class="group" id="rights"><h2>Your rights</h2><ul class="rows">
+<li><b>See, correct, move or delete your data</b><span>Most of it is in the app (Account, profiles, addons). For a copy of everything or anything else, write to <a href="mailto:support@reddate.xyz">support@reddate.xyz</a> and we'll answer within 30 days.</span></li>
+<li><b>Complain</b><span>You can also contact your local data protection authority.</span></li>
+<li><b>If something goes wrong</b><span>If your data is ever exposed, we'll tell the people affected by email, and the authorities where the law requires it.</span></li>
+<li><b>Service providers</b><span>Render, Upstash, Resend and Cloudflare handle data for us under their standard data processing terms. Some of them are in the United States.</span></li>
+<li><b>Age</b><span>Reddate isn't meant for children under 13.</span></li>
+</ul></section>
+<section class="group" id="control"><h2>Your control</h2><ul class="rows">
+<li><b>Delete everything</b><span>Account → Delete account removes your account, profiles and saved addons, and signs out every device. It can't be undone.</span></li>
+<li><b>Unconfirmed accounts</b><span>If you never confirm your email, the account is deleted after 30 days.</span></li>
+<li><b>Questions</b><span>Write to <a href="mailto:support@reddate.xyz">support@reddate.xyz</a>.</span></li>
+</ul></section>
+</div>
+</main>
+<footer><div class="wrap"><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="mailto:support@reddate.xyz">support@reddate.xyz</a> · Reddate TV · early test build · Reddate does not host or provide any video. This product uses the TMDB API but is not endorsed or certified by TMDB.</div></footer>
+<script src="/assets/nav.js"></script>
+</body></html>

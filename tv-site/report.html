@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Report a bug · Reddate TV</title>
+<meta name="description" content="Tell us what went wrong in Reddate TV. Add a screenshot if you like.">
+<link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Hanken+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/landing.css?v=10">
+<meta property="og:title" content="Report a bug · Reddate TV">
+<meta property="og:description" content="Tell us what went wrong in Reddate TV. Add a screenshot if you like.">
+<meta property="og:image" content="https://tv.reddate.xyz/assets/brag.jpg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tv.reddate.xyz/report">
+<link rel="canonical" href="https://tv.reddate.xyz/report">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="icon" href="/icons/icon-192.png" sizes="192x192" type="image/png">
+<meta name="theme-color" content="#141110">
+</head>
+<body>
+<header class="bar"><div class="wrap">
+  <a class="brand" href="/"><img src="/assets/logo.svg" alt="">Reddate <b>TV</b></a>
+  <nav aria-label="Pages">
+    <a href="/features">Features</a>
+    <a href="/addons-guide">Add addons</a>
+    <a href="/join">Join a party</a>
+    <a class="pill" href="/#download">Download</a>
+  </nav>
+</div></header>
+<main>
+<div class="wrap page">
+  <p class="eyebrow">Report a bug</p>
+  <h1>What went wrong?</h1>
+  <p class="lede">Tell us in your own words. A screenshot helps a lot. It goes straight to the person who fixes it.</p>
+  <form id="f" class="rf" novalidate>
+    <label for="m">What happened</label>
+    <textarea id="m" rows="6" maxlength="4000" placeholder="For example: picked South Park S3E4, it kept loading and never started." required></textarea>
+    <label for="p">Screenshot or photo of the TV <span>(optional)</span></label>
+    <input id="p" type="file" accept="image/png,image/jpeg,image/webp">
+    <img id="pv" alt="" hidden>
+    <label for="c">Your email, if you want a reply <span>(optional)</span></label>
+    <input id="c" type="email" maxlength="200" autocomplete="email" placeholder="you@example.com">
+    <input id="w" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
+    <p id="st" role="status"></p>
+    <button class="btn btn-main" id="go" type="submit">Send report</button>
+    <p class="fine">We receive your message, the picture, your email if you add it, and the app version and TV model if you came from the TV app. Nothing else. See <a href="/privacy">Privacy</a>.</p>
+  </form>
+</div>
+</main>
+<style>
+.rf{max-width:640px;display:grid;gap:10px;margin-top:20px}
+.rf label{font-weight:700;margin-top:10px}.rf label span{font-weight:400;color:var(--muted,#a99f98)}
+.rf textarea,.rf input[type=email],.rf input[type=file]{width:100%;font:inherit;color:inherit;background:var(--paper-2,#1e1917);border:2px solid var(--line,#3a322e);border-radius:14px;padding:14px 16px}
+.rf textarea:focus,.rf input:focus{outline:none;border-color:var(--accent,#e8602c)}
+.rf img{max-width:100%;max-height:260px;border-radius:12px;justify-self:start}
+.rf .btn{justify-self:start;margin-top:12px;cursor:pointer}
+.rf .btn[disabled]{opacity:.6;cursor:default}
+#st{min-height:1.4em;margin:6px 0 0}#st.err{color:#ff8a70}#st.ok{color:#7ddc9a;font-weight:700}
+.fine{font-size:.85rem;color:var(--muted,#a99f98)}
+</style>
+<script>
+(function () {
+  var q = new URLSearchParams(location.search), img = '';
+  var f = document.getElementById('f'), st = document.getElementById('st'), go = document.getElementById('go');
+  var pv = document.getElementById('pv'), file = document.getElementById('p');
+  function say(t, c) { st.textContent = t; st.className = c || ''; }
+  // Shrink the picture in the browser: a phone photo can be 10 MB, a report only needs it readable.
+  file.addEventListener('change', function () {
+    img = ''; pv.hidden = true;
+    var fl = file.files && file.files[0];
+    if (!fl) return;
+    var url = URL.createObjectURL(fl), im = new Image();
+    im.onload = function () {
+      var s = Math.min(1, 1600 / Math.max(im.width, im.height)), c = document.createElement('canvas');
+      c.width = Math.round(im.width * s); c.height = Math.round(im.height * s);
+      c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+      img = c.toDataURL('image/jpeg', 0.82); pv.src = img; pv.hidden = false; URL.revokeObjectURL(url); say('');
+    };
+    im.onerror = function () { say('Couldn’t read that picture. Try a PNG or JPEG.', 'err'); URL.revokeObjectURL(url); };
+    im.src = url;
+  });
+  f.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var m = document.getElementById('m').value.trim();
+    if (m.length < 5) { say('Tell us a little more about what went wrong.', 'err'); return; }
+    go.disabled = true; say('Sending…');
+    fetch('/api/report', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: m, contact: document.getElementById('c').value, image: img, website: document.getElementById('w').value,
+        source: q.get('s') || 'phone', app: q.get('v') || '', device: q.get('d') || '', screen: q.get('p') || '' })
+    }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok && j.ok, j: j }; }); })
+      .then(function (r) {
+        if (r.ok) { f.reset(); img = ''; pv.hidden = true; say('Sent. Thank you, this really helps.', 'ok'); }
+        else { go.disabled = false; say(r.j.error || 'Couldn’t send it. Please try again.', 'err'); }
+      }).catch(function () { go.disabled = false; say('No connection. Please try again.', 'err'); });
+  });
+})();
+</script>
+<footer><div class="wrap"><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="mailto:support@reddate.xyz">support@reddate.xyz</a> · Reddate TV · early test build · Reddate does not host or provide any video. This product uses the TMDB API but is not endorsed or certified by TMDB.</div></footer>
+<script src="/assets/nav.js"></script>
+</body></html>

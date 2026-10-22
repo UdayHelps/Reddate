@@ -1,0 +1,17 @@
+node_modules/
+.env
+.env.local
+*.log
+.DS_Store
+public/__test/
+local.properties
+*.keystore
+*.jks
+keystore.properties
+.env.*
+!.env.example
+.agents/
+.claude/
+.taste-skill/
+skills-lock.json
+downloads/*.apk

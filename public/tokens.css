@@ -1,0 +1,107 @@
+/* Reddate design tokens — the single source for colour, type, spacing, motion and layering.
+ * Hallmark · genre: modern-minimal · theme: custom (brand-preserved Reddit palette)
+ * Dark is the default; [data-theme="light"] on <html> switches to light.
+ * Reddit orange #ff4500 = oklch(66% 0.229 35.4); tuned per theme for contrast. */
+
+:root {
+    /* Dark (default). Neutrals lean warm toward the orange anchor (hue 40). */
+    --color-paper:        oklch(16% 0.008 40);
+    --color-paper-2:      oklch(20% 0.009 40);
+    --color-paper-3:      oklch(24% 0.010 40);
+    --color-rule:         oklch(31% 0.010 40);
+    --color-rule-2:       oklch(52% 0.010 40);   /* control borders: ≥ 3:1 on paper */
+    --color-muted:        oklch(70% 0.010 40);
+    --color-ink:          oklch(94% 0.006 60);
+    --color-accent:       oklch(68% 0.21 36);    /* Reddit orange, tuned for dark */
+    --color-accent-hover: oklch(72% 0.20 36);
+    --color-accent-ink:   oklch(16% 0.008 40);
+    --color-focus:        oklch(68% 0.21 36);
+    --color-stage:        oklch(11% 0.006 40);   /* behind the video, both themes */
+    --color-stage-ink:    oklch(80% 0.008 40);
+    --color-success:      oklch(72% 0.15 150);
+    --color-error:        oklch(68% 0.19 25);
+    --color-error-ink:    oklch(16% 0.008 40);
+    --color-info:         oklch(72% 0.12 245);
+    --color-violet:       oklch(74% 0.13 295);
+    --color-amber:        oklch(80% 0.14 75);
+    --color-amber-ink:    oklch(16% 0.008 40);
+    --color-logo-chip:    oklch(97% 0.003 40);   /* white-ish chip so dark logos stay visible */
+    --color-logo-rule:    oklch(86% 0.006 40);
+    --color-scrim:        oklch(6% 0.006 40 / 0.62);
+    --color-glass:        oklch(14% 0.008 40 / 0.58); /* see-through comments over full-screen video */
+    --color-glass-rule:   oklch(100% 0 0 / 0.14);
+    --color-shadow:       oklch(4% 0.006 40 / 0.45);
+    --mask-volume:        url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22black%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z%22 /%3E %3Cpath d=%22M16 9a5 5 0 0 1 0 6%22 /%3E %3Cpath d=%22M19.364 18.364a9 9 0 0 0 0-12.728%22 /%3E%3C/svg%3E");   /* Lucide volume-2, as a mask */
+
+    --font-body: "Geist", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, monospace;
+
+    /* Major-third scale; five sizes in use. */
+    --text-xs:   0.75rem;
+    --text-sm:   0.875rem;
+    --text-base: 1rem;
+    --text-md:   1.25rem;
+    --text-lg:   1.5625rem;
+
+    --space-3xs: 0.125rem;
+    --space-2xs: 0.25rem;
+    --space-xs:  0.5rem;
+    --space-sm:  0.75rem;
+    --space-md:  1rem;
+    --space-lg:  1.5rem;
+    --space-xl:  2.5rem;
+    --space-2xl: 4rem;
+
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-pill: 999px;
+
+    --control-h: 2.5rem;
+    --topbar-h: 3.5rem;
+    --rail-w: 22rem;
+
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    --dur-micro: 120ms;
+    --dur-short: 220ms;
+    --dur-long: 420ms;
+
+    --z-base: 1;
+    --z-raised: 10;
+    --z-sticky: 200;
+    --z-sheet: 300;
+    --z-call: 350;
+    --z-modal: 400;
+    --z-toast: 500;
+    --z-overlay: 600;
+}
+[data-theme="light"] {
+    --color-paper:        oklch(98% 0.004 40);
+    --color-paper-2:      oklch(95.5% 0.006 40);
+    --color-paper-3:      oklch(92.5% 0.008 40);
+    --color-rule:         oklch(87% 0.010 40);
+    --color-rule-2:       oklch(60% 0.010 40);
+    --color-muted:        oklch(46% 0.010 40);
+    --color-ink:          oklch(19% 0.010 40);
+    --color-accent:       oklch(55% 0.21 36);
+    --color-accent-hover: oklch(50% 0.21 36);
+    --color-accent-ink:   oklch(99% 0.003 40);
+    --color-focus:        oklch(55% 0.21 36);
+    --color-stage:        oklch(14% 0.006 40);
+    --color-success:      oklch(50% 0.14 150);
+    --color-error:        oklch(52% 0.20 25);
+    --color-error-ink:    oklch(99% 0.003 40);
+    --color-info:         oklch(50% 0.14 245);
+    --color-violet:       oklch(50% 0.17 295);
+    --color-amber:        oklch(55% 0.13 70);
+    --color-amber-ink:    oklch(99% 0.003 40);
+    --color-scrim:        oklch(20% 0.010 40 / 0.45);
+    --color-glass:        oklch(98% 0.004 40 / 0.66);
+    --color-glass-rule:   oklch(20% 0.010 40 / 0.14);
+    --color-shadow:       oklch(20% 0.010 40 / 0.16);
+}
+@media (pointer: coarse) {
+    :root { --control-h: 2.75rem; } /* 44px touch floor */
+}

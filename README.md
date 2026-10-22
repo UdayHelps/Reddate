@@ -14,7 +14,8 @@
   <a href="https://tv.reddate.xyz/download"><b>Download for Android TV</b></a> ·
   <a href="https://tv.reddate.xyz/app">Open in the browser</a> ·
   <a href="https://tv.reddate.xyz/addon-list">Addons</a> ·
-  <a href="docs/">Docs</a>
+  <a href="docs/">Docs</a> ·
+  <a href="https://discord.gg/UubFc9Kw3d">Discord</a>
 </p>
 
 <p align="center">
@@ -23,6 +24,7 @@
   <img alt="Android TV" src="https://img.shields.io/badge/Android%20TV-Kotlin%20%2B%20Compose-1d1917?style=flat-square">
   <img alt="Node 18+" src="https://img.shields.io/badge/Node-18%2B-1d1917?style=flat-square">
   <img alt="Stremio addon format" src="https://img.shields.io/badge/addons-Stremio%20format-1d1917?style=flat-square">
+  <a href="https://discord.gg/UubFc9Kw3d"><img alt="Discord" src="https://img.shields.io/badge/chat-Discord-5865F2?style=flat-square&logo=discord&logoColor=white"></a>
 </p>
 
 ---
@@ -123,6 +125,10 @@ Everything optional (accounts, the movie catalog, GIFs, stats) turns on with env
 ## Docs
 
 [Architecture](docs/ARCHITECTURE.md) · [Addons](docs/ADDONS.md) · [Privacy](docs/PRIVACY.md) · [Self-hosting](docs/SELF-HOSTING.md) · [Performance notes](docs/PERFORMANCE.md) · [Test plan](docs/TEST-PLAN.md)
+
+## Community
+
+Questions, bugs, ideas and early builds: join the [Reddate Discord](https://discord.gg/UubFc9Kw3d). Longer discussions live in [GitHub Discussions](../../discussions).
 
 ## Contributing
 

@@ -1,7 +1,7 @@
 {
   "name": "reddate",
   "version": "2.0.0",
-  "description": "Watch together in private rooms: synced video, chat that isn't stored, and a voice/video lounge",
+  "description": "Open-source watch parties for Android TV, phones and browsers: synced playback, chat that is not stored, Stremio-format addons",
   "license": "MIT",
   "author": "Uday Katare",
   "repository": {
@@ -22,6 +22,18 @@
     "nodemon": "^3.0.1"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "watch-party",
+    "android-tv",
+    "socket.io",
+    "stremio-addons",
+    "jetpack-compose",
+    "react",
+    "nodejs"
+  ],
+  "bugs": {
+    "url": "https://github.com/UdayHelps/Reddate/issues"
   }
 }

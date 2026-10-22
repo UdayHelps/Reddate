@@ -1,6 +1,6 @@
 # Reddate for Android TV
 
-A thin Android TV app around Reddate's TV page (`/?tv=1`, see `public/tv.js`):
+The Android TV app. It runs Reddate's engine page (`/?tv=1`, see `public/tv.js`) in a hidden WebView for rooms, sync, chat and accounts, and draws Home, titles, search and settings natively (Jetpack Compose for TV):
 
 - **`MainActivity`** hosts the page in a full-screen WebView. The remote's D-pad arrives in the page as
   arrow keys and Enter; **Back** is forwarded to the page so it can step back through its own screens.
@@ -26,7 +26,7 @@ run the Reddate server locally (`npm start`). To point at another address (for e
 ./gradlew installDebug -PstartUrl=http://192.168.1.20:3090/?tv=1
 ```
 
-Release builds load `https://reddate.xyz/?tv=1`.
+Release builds load `https://tv.reddate.xyz/?tv=1`.
 
 ## Install on a real TV
 
@@ -36,5 +36,9 @@ Turn on *Developer options → Network debugging* on the TV, then:
 adb connect <tv-ip>:5555
 adb install -r app/build/outputs/apk/debug/app-debug.apk
 ```
+
+## Releasing
+
+The release key lives outside the repository, in `~/.reddate/keystore.properties` (`storeFile`, `storePassword`, `keyAlias`, `keyPassword`). Bump `versionCode` and `versionName` in `app/build.gradle.kts`, then run `./release.sh "New: something|Home bugs fixed"`. It builds the signed APK, writes `downloads/version.json` and publishes the APK as a GitHub Release (needs the GitHub CLI signed in). The site's `/get` and the app's Update button read from that release.
 
 Never commit a signing keystore or `local.properties`.

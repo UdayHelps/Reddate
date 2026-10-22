@@ -1,13 +1,14 @@
 # Contributing to Reddate
 
 Thanks for wanting to help! Reddate is a small project: a Node/Express +
-Socket.IO server and a plain HTML/CSS/JS front end. There's no build step, no
-framework and no database to set up.
+Socket.IO server, plain JavaScript engine pages, a React browser app (`web/`) and
+an Android TV app (`android-tv/`). The server needs no build step and no
+database to run locally.
 
 ## Run it locally (about 2 minutes)
 
 ```bash
-git clone <your fork>
+git clone https://github.com/<you>/Reddate.git   # your fork of UdayHelps/Reddate
 cd Reddate
 npm install
 npm start          # http://localhost:3000   (npm run dev auto-reloads)
@@ -37,6 +38,10 @@ URLs often contain a private token). Use placeholders in examples.
 | `public/voice.js` | The Lounge (WebRTC voice/video) |
 | `public/mkv.js`, `public/badges.js` | MKV header reading, stream badges |
 | `views/stats.html` | The private `/stats` dashboard |
+| `accounts.js`, `catalog.js`, `yt-addon.js`, `trackers.js` | Accounts and profiles, the TMDB catalog, Reddate YT, Trakt and Simkl |
+| `web/` | The browser app (React and Vite). After changing it run `cd web && npm install && npm run build` and commit `web/dist` |
+| `android-tv/` | The Android TV app (see its README to build it) |
+| `tv-site/` | The info site (download, addons, legal pages) |
 
 ## Ground rules
 
@@ -54,7 +59,7 @@ URLs often contain a private token). Use placeholders in examples.
 
 ## Good first things
 
-See the Roadmap in the README. Testing on real devices (iPhone Safari, Android
+Look for issues labelled `good first issue`, or see [docs/TEST-PLAN.md](docs/TEST-PLAN.md). Testing on real devices (iPhone Safari, Android
 Chrome, Google TV) and reporting what breaks is just as valuable as code.
 
 ## Licence

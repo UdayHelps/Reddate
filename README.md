@@ -1,3 +1,7 @@
+> **This branch (`main`) runs [reddate.xyz](https://reddate.xyz)**, the original browser watch-party page.
+> The full project (Android TV app, browser app, accounts, catalog and the info site) is on the
+> [`tv` branch](../../tree/tv), which is the default branch and runs [tv.reddate.xyz](https://tv.reddate.xyz).
+
 # Reddate
 
 Create a private room, drop in a video, and watch it in perfect sync while you

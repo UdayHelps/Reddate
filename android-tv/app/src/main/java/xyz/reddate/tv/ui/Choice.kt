@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.verticalScroll
@@ -259,6 +260,22 @@ fun RemoveContinueDialog(model: AppModel, item: CwItem) {
     LaunchedEffect(Unit) { delay(80); try { keep.requestFocus() } catch (_: Exception) { } }
 }
 
+/** Where updates and problems are talked about: a code to scan with a phone. */
+private const val DISCORD_URL = "https://discord.gg/UubFc9Kw3d"
+
+@Composable
+private fun DiscordCode() {
+    val bmp = remember { qrBitmap(DISCORD_URL, 300) }
+    if (bmp == null) return
+    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(start = 16.dp)) {
+        Box(Modifier.size(104.dp).clip(RoundedCornerShape(10.dp)).background(Color.White).padding(6.dp)) {
+            androidx.compose.foundation.Image(bmp.asImageBitmap(), contentDescription = "QR code to join the Reddate Discord", modifier = Modifier.fillMaxSize())
+        }
+        Text("Join our Discord", fontSize = 13.sp, fontWeight = FontWeight.Bold, color = C.ink, modifier = Modifier.padding(top = 6.dp))
+        Text("updates and help", fontSize = 12.sp, color = C.muted)
+    }
+}
+
 /** Check for, download and install a new version of the app. */
 @Composable
 fun UpdateDialog(model: AppModel) {
@@ -294,8 +311,14 @@ fun UpdateDialog(model: AppModel) {
 
     Dialog(onDismissRequest = { model.dialog = null }, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Sheet(620.dp) {
-            Text("Reddate TV updates", fontSize = 30.sp, fontWeight = FontWeight.ExtraBold, fontFamily = Display, color = C.ink)
-            Text("You have version $installed", fontSize = 16.sp, color = C.muted, modifier = Modifier.padding(top = 4.dp))
+            // The title on the left; on the right a code that opens our Discord, for updates and problems.
+            Row(verticalAlignment = Alignment.Top) {
+                Column(Modifier.weight(1f)) {
+                    Text("Reddate TV updates", fontSize = 30.sp, fontWeight = FontWeight.ExtraBold, fontFamily = Display, color = C.ink)
+                    Text("You have version $installed", fontSize = 16.sp, color = C.muted, modifier = Modifier.padding(top = 4.dp))
+                }
+                DiscordCode()
+            }
             Spacer(Modifier.height(20.dp))
             val u = model.update
             when (state) {

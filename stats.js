@@ -18,6 +18,8 @@ const TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN || '';
 // Local development (MAIL_MODE=log) never writes into the live database, the same rule accounts.js follows. The
 // developer's .env holds the real Upstash settings, so without this a test run (or a load test) counts as real visitors.
 const enabled = Boolean(URL_ && TOKEN) && process.env.MAIL_MODE !== 'log';
+// Each site keeps its own counters: set STATS_PREFIX (e.g. stats-xyz) when two services share one Redis.
+const P = (process.env.STATS_PREFIX || 'stats').replace(/[^a-z0-9_-]/gi, '');
 const FLUSH_MS = 30000;
 const DAY_TTL = 400 * 24 * 3600; // keep daily keys ~13 months
 
@@ -91,16 +93,16 @@ async function flush() {
     const cmds = [];
     for (const [key, n] of counts) {
         const [d, event] = key.split('|');
-        cmds.push(['INCRBY', `stats:${d}:${event}`, String(n)], ['EXPIRE', `stats:${d}:${event}`, String(DAY_TTL)]);
-        cmds.push(['INCRBY', `stats:total:${event}`, String(n)]);
+        cmds.push(['INCRBY', `${P}:${d}:${event}`, String(n)], ['EXPIRE', `${P}:${d}:${event}`, String(DAY_TTL)]);
+        cmds.push(['INCRBY', `${P}:total:${event}`, String(n)]);
     }
     for (const [d, set] of visitors) {
-        cmds.push(['PFADD', `stats:${d}:visitors`, ...set], ['EXPIRE', `stats:${d}:visitors`, String(DAY_TTL)]);
+        cmds.push(['PFADD', `${P}:${d}:visitors`, ...set], ['EXPIRE', `${P}:${d}:visitors`, String(DAY_TTL)]);
     }
     const peak = { ...peakToday };
     if (peak.value > 0 && (peak.day !== peakWritten.day || peak.value > peakWritten.value)) {
-        cmds.push(['EVAL', RAISE_SCRIPT, '1', `stats:${peak.day}:peak`, String(peak.value), String(DAY_TTL)]);
-        cmds.push(['EVAL', RAISE_SCRIPT, '1', 'stats:total:peak', String(peak.value), '315360000']);
+        cmds.push(['EVAL', RAISE_SCRIPT, '1', `${P}:${peak.day}:peak`, String(peak.value), String(DAY_TTL)]);
+        cmds.push(['EVAL', RAISE_SCRIPT, '1', `${P}:total:peak`, String(peak.value), '315360000']);
     }
     if (!cmds.length) return;
     try {
@@ -125,10 +127,10 @@ async function report(days = 30) {
     const fields = [...EVENTS, 'peak'];
     const cmds = [];
     for (const d of dates) {
-        cmds.push(['MGET', ...fields.map(f => `stats:${d}:${f}`)]);
-        cmds.push(['PFCOUNT', `stats:${d}:visitors`]);
+        cmds.push(['MGET', ...fields.map(f => `${P}:${d}:${f}`)]);
+        cmds.push(['PFCOUNT', `${P}:${d}:visitors`]);
     }
-    cmds.push(['MGET', ...fields.map(f => `stats:total:${f}`)]);
+    cmds.push(['MGET', ...fields.map(f => `${P}:total:${f}`)]);
     const out = await redis(cmds);
     const num = v => Number(v) || 0;
     const rows = dates.map((d, i) => {

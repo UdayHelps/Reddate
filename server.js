@@ -626,6 +626,23 @@ function startParty(socket, room) {
 const EMPTY_ROOM_KEEP_MS = 4 * 60 * 60 * 1000; // an invite stays good until the room is closed on purpose
 // A deploy stops this server: people aren't leaving, they're about to reconnect to the new one.
 let shuttingDown = false;
+// A party nobody is using closes by itself, so forgotten rooms don't hold sockets (and keep the server awake).
+// Paused for 30 minutes, or nothing started and nobody chatting for 30 minutes: closed. A playing video is left
+// alone (a film can run for hours without a message), unless nobody has touched anything for 6 hours.
+const PARTY_IDLE_MS = (Number(process.env.PARTY_IDLE_MIN) || 30) * 60 * 1000;
+const PARTY_PLAYING_MAX_MS = 6 * 60 * 60 * 1000;
+setInterval(() => {
+    const now = Date.now();
+    for (const [roomId, room] of [...rooms]) {
+        if (!room.party || room.users.size === 0) continue;
+        const v = room.videoState, quiet = now - Math.max(v.lastUpdate || 0, room.chatAt || 0);
+        const loaded = !!(v.videoId || v.src || v.content);
+        const idle = v.isPlaying ? quiet > PARTY_PLAYING_MAX_MS
+            : loaded ? now - (v.lastUpdate || 0) > PARTY_IDLE_MS : quiet > PARTY_IDLE_MS;
+        if (idle) endParty(roomId, room, room.party.hostName, 'closed after being idle');
+    }
+}, 60000).unref();
+
 process.on('SIGTERM', () => { shuttingDown = true; setTimeout(() => process.exit(0), 1500); });
 
 // What a returning viewer says was playing, checked like a fresh load-video.
@@ -657,10 +674,10 @@ function handHost(roomId, room, nextId) {
 }
 
 /** No host is left: everyone is sent home and the room is closed. */
-function endParty(roomId, room, hostName) {
+function endParty(roomId, room, hostName, reason) {
     clearTimeout(room.party && room.party.timer);
-    trail(roomId, `party ended (host ${hostName || '?'})`);
-    io.to(roomId).emit('party-ended', { host: hostName || 'The host' });
+    trail(roomId, `party ended (${reason || 'host ' + (hostName || '?')})`);
+    io.to(roomId).emit('party-ended', { host: hostName || 'The host', reason: reason || undefined });
     for (const id of [...room.users.keys()]) {
         const s = io.sockets.sockets.get(id);
         if (s) { s.leave(roomId); s.data.roomId = null; }
@@ -876,6 +893,7 @@ io.on('connection', (socket) => {
         const roomId = socket.data.roomId;
         if (!roomId) return done(false); // not back in the room yet: the sender keeps it and tries again
         if (typeof msg.v !== 'string') return done(true);
+        { const rm = rooms.get(roomId); if (rm) rm.chatAt = Date.now(); }
         if (msg.t === 'text') { if (!msg.v.trim() || msg.v.length > MAX_TEXT) return; }
         else if (msg.t === 'img') { if (msg.v.length > MAX_IMAGE || !IMG_OK.test(msg.v)) return; }
         else return;

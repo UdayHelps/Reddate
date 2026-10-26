@@ -324,7 +324,7 @@ function startApp() {
     socket.on('kicked', d => { showToast(`${(d && d.by) || 'The host'} removed you from the party`); leaveToHome(); });
     // Every host has gone: the party is over for everyone.
     socket.on('party-ended', d => {
-        const msg = `${(d && d.host) || 'The host'} ended the party`;
+        const msg = d && d.reason ? 'The party closed after 30 minutes of inactivity' : `${(d && d.host) || 'The host'} ended the party`;
         if (window.__nativeOpen && window.ReddateNative) window.ReddateNative.command(JSON.stringify({ cmd: 'toast', text: msg }));
         showToast(msg);
         leaveToHome();
